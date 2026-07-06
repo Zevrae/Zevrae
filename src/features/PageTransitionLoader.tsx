@@ -40,8 +40,8 @@ export function PageTransitionLoader() {
         tlRef.current?.kill();
 
         // Pre-position
-        gsap.set(curtainRef.current, { yPercent: 100, opacity: 1 });
-        letters.forEach((el) => gsap.set(el, { yPercent: 120 }));
+        gsap.set(curtainRef.current, { yPercent: 100, opacity: 1, force3D: true });
+        letters.forEach((el) => gsap.set(el, { yPercent: 120, force3D: true }));
 
         const tl = gsap.timeline({
           onComplete: () => setPhase("holding"),
@@ -53,18 +53,19 @@ export function PageTransitionLoader() {
           yPercent: 0,
           duration: 0.85,
           ease: "power2.inOut",
+          force3D: true,
         });
 
-        // Simultaneously shrink + push page content up
+        // Simultaneously push page content up + fade (no scale — avoids full-page repaint)
         if (pageContent) {
           tl.to(
             pageContent,
             {
-              scale: 0.92,
-              y: -80,
+              y: -60,
               opacity: 0,
               duration: 0.7,
               ease: "power2.inOut",
+              force3D: true,
             },
             0, // start at the same time
           );
@@ -78,6 +79,7 @@ export function PageTransitionLoader() {
               yPercent: 0,
               duration: 0.5,
               ease: "expo.out",
+              force3D: true,
             },
             `${0.55 + seqIdx * 0.05}`,
           );
@@ -103,7 +105,7 @@ export function PageTransitionLoader() {
             // Reset page content
             if (pageContent) {
               gsap.set(pageContent, {
-                clearProps: "scale,y,opacity",
+                clearProps: "y,opacity,transform",
               });
             }
             setPhase("idle");
@@ -120,6 +122,7 @@ export function PageTransitionLoader() {
               yPercent: -120,
               duration: 0.38,
               ease: "expo.in",
+              force3D: true,
             },
             seqIdx * 0.03,
           );
@@ -133,6 +136,7 @@ export function PageTransitionLoader() {
             yPercent: -100,
             duration: 0.75,
             ease: "power2.inOut",
+            force3D: true,
           },
           0.45,
         );
@@ -141,13 +145,13 @@ export function PageTransitionLoader() {
         if (pageContent) {
           tl.fromTo(
             pageContent,
-            { scale: 1, y: 30, opacity: 0 },
+            { y: 30, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              scale: 1,
               duration: 0.5,
               ease: "power2.out",
+              force3D: true,
             },
             0.65,
           );
@@ -181,6 +185,8 @@ export function PageTransitionLoader() {
           inset: 0,
           backgroundColor: "#C5A059",
           willChange: "transform",
+          backfaceVisibility: "hidden",
+          transform: "translateZ(0)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
