@@ -1060,7 +1060,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
   return (
     <>
       <AnimatePresence mode="wait">
-      {(categoryFilter === 'all' || categoryFilter === 'men') && (
+      {categoryFilter === 'men' && (
         <motion.section 
           key="men"
           initial={{ opacity: 0, height: 0 }}
@@ -1229,7 +1229,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
           </div>
         </motion.section>
       )}
-      {(categoryFilter === 'all' || categoryFilter === 'women') && (
+      {categoryFilter === 'women' && (
         <motion.section 
           key="women"
           initial={{ opacity: 0, height: 0 }}
@@ -1293,7 +1293,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
           </div>
         </motion.section>
       )}
-      {(categoryFilter === 'all' || categoryFilter === 'jewellery') && (
+      {categoryFilter === 'jewellery' && (
         <motion.section 
           key="jewellery"
           initial={{ opacity: 0, height: 0 }}
