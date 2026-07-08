@@ -488,7 +488,7 @@ function ProductsSection() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm());
   const [saving, setSaving] = useState(false);
-  const [imageInput, setImageInput] = useState('');
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   // ── Search ─────────────────────────────────────────────────────────────────
   const [search, setSearch] = useState('');
@@ -515,7 +515,7 @@ function ProductsSection() {
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm());
-    setImageInput('');
+    setImageFiles([]);
     setShowModal(true);
   };
 
@@ -533,7 +533,7 @@ function ProductsSection() {
       images: p.images || [],
       status: p.status,
     });
-    setImageInput((p.images || []).join(', '));
+    setImageFiles([]);
     setShowModal(true);
   };
 
@@ -549,13 +549,30 @@ function ProductsSection() {
   const handleSave = async () => {
     if (!form.name.trim()) return;
     setSaving(true);
-    const parsedImages = imageInput
-      .split(',')
-      .map(s => s.trim())
-      .filter(Boolean);
-    const payload = { ...form, images: parsedImages };
-
+    
     try {
+      let uploadedUrls: string[] = [];
+      
+      // Upload images if there are any
+      if (imageFiles.length > 0) {
+        const formData = new FormData();
+        imageFiles.forEach(file => {
+          formData.append('images', file);
+        });
+        
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        if (!uploadRes.ok) throw new Error('Failed to upload images');
+        const uploadData = await uploadRes.json();
+        uploadedUrls = uploadData.urls || [];
+      }
+      
+      // Combine existing kept images with newly uploaded URLs
+      const finalImages = [...form.images, ...uploadedUrls];
+      const payload = { ...form, images: finalImages };
+
       if (editingId) {
         const res = await fetch(`/api/products/${editingId}`, {
           method: 'PUT',
@@ -847,27 +864,50 @@ function ProductsSection() {
               )}
             </FormField>
 
-            <FormField label="Product Images (URLs, comma-separated)">
-              <textarea
-                value={imageInput}
-                onChange={e => setImageInput(e.target.value)}
-                placeholder="https://example.com/front.jpg, https://example.com/back.jpg"
-                rows={2}
-                className={`${inputCls} resize-none`}
-              />
-              <p className="text-[9px] text-[#EAE6E1]/25 font-sans mt-1.5">First URL = front image, second = back image (for product page)</p>
-            </FormField>
-
-            {/* Image previews */}
-            {imageInput.split(',').map(s => s.trim()).filter(Boolean).length > 0 && (
-              <div className="flex gap-2 mb-4">
-                {imageInput.split(',').map(s => s.trim()).filter(Boolean).slice(0, 3).map((url, i) => (
-                  <div key={i} className="w-20 h-20 rounded-sm overflow-hidden border border-[#EAE6E1]/10 bg-[#0a0a0a] flex-shrink-0">
-                    <img src={url} alt={`preview ${i + 1}`} className="w-full h-full object-cover opacity-80" />
+            <FormField label="Product Images">
+              <div className="flex flex-wrap gap-4 mb-3">
+                {/* Existing Images */}
+                {form.images.map((img, idx) => (
+                  <div key={idx} className="relative w-20 h-20 rounded overflow-hidden border border-[#EAE6E1]/20">
+                    <img src={img} alt="Product" className="w-full h-full object-cover" />
+                    <button
+                      onClick={() => setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }))}
+                      className="absolute top-1 right-1 bg-black/60 p-0.5 rounded-full hover:bg-red-500/80 transition-colors"
+                    >
+                      <X size={12} className="text-white" />
+                    </button>
+                  </div>
+                ))}
+                
+                {/* Selected Files to Upload */}
+                {imageFiles.map((file, idx) => (
+                  <div key={idx} className="relative w-20 h-20 rounded overflow-hidden border border-[#C5A059] opacity-80">
+                    <img src={URL.createObjectURL(file)} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      onClick={() => setImageFiles(files => files.filter((_, i) => i !== idx))}
+                      className="absolute top-1 right-1 bg-black/60 p-0.5 rounded-full hover:bg-red-500/80 transition-colors"
+                    >
+                      <X size={12} className="text-white" />
+                    </button>
                   </div>
                 ))}
               </div>
-            )}
+              
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={e => {
+                  if (e.target.files) {
+                    setImageFiles(prev => [...prev, ...Array.from(e.target.files!)]);
+                  }
+                }}
+                className="text-xs text-[#EAE6E1]/70 file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black hover:file:bg-[#d8b571] cursor-pointer w-full border border-[#EAE6E1]/10 p-2 rounded-sm"
+              />
+              <p className="text-[9px] text-[#EAE6E1]/25 font-sans mt-1.5">First image = front, second = back (for product page hover)</p>
+            </FormField>
+
+            {/* Legacy Image previews removed */}
 
             <FormField label="Status">
               <select

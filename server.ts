@@ -7,6 +7,9 @@ import Database from "better-sqlite3";
 import crypto from "crypto";
 import { Resend } from "resend";
 import mongoose from "mongoose";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "./backend/config/cloudinary.js";
 
 dotenv.config();
 
@@ -121,6 +124,25 @@ async function startServer() {
       res.json(obj);
     } catch (err: any) {
       res.status(500).json({ error: "Failed to create product" });
+    }
+  });
+
+  const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: "zevrae_products",
+      allowedFormats: ["jpg", "png", "jpeg", "webp"],
+    } as any,
+  });
+  
+  const upload = multer({ storage: storage });
+
+  app.post("/api/upload", upload.array("images", 5), (req: any, res: any) => {
+    try {
+      const urls = req.files.map((file: any) => file.path);
+      res.json({ urls });
+    } catch (error) {
+      res.status(500).json({ error: "Image upload failed" });
     }
   });
 
