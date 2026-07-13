@@ -20,56 +20,6 @@ import { PageTransitionLoader } from './features/PageTransitionLoader';
 import { usePageTransition } from './features/PageTransitionContext';
 import { CustomCursor } from './features/CustomCursor';
 
-function CampaignSection() {
-  const editorialRef = useRef(null);
-  const { scrollYProgress: editorialScroll } = useScroll({ 
-    target: editorialRef,
-    offset: ["start end", "end start"]
-  });
-  // const editorialY = useTransform(editorialScroll, [0, 1], [50, -50]);
-
-  return (
-    <section id="campaign" ref={editorialRef} className="py-[160px] px-6 md:px-12 max-w-[1400px] mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32 items-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-          className="order-2 md:order-1 pr-0 md:pr-16"
-        >
-          <h2 className="text-[10px] uppercase tracking-[0.4em] font-serif text-[#EAE6E1]/50 mb-12">
-            CAMPAIGN
-          </h2>
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif font-light mb-12 leading-tight text-[#EAE6E1] tracking-[0.05em]">
-            Summer / Spring 2026
-          </h3>
-          <p className="text-[#EAE6E1]/60 font-serif leading-relaxed text-[13px] md:text-[14px] max-w-md tracking-[0.02em]">
-            Luxury redefined for the modern connoisseur. This collection merges timeless sophistication with contemporary design, offering exclusive pieces that tell a story of refined taste and effortless elegance.
-          </p>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 2, ease: [0.25, 0.1, 0.25, 1] }}
-          className="order-1 md:order-2 relative"
-        >
-          <div className="aspect-[4/5] overflow-hidden bg-[#111111]" data-cursor-image>
-            <img 
-              src="https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=1974&auto=format&fit=crop" 
-              alt="Campaign" 
-              className="w-full h-full object-cover opacity-70 grayscale-[30%]"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-[#0a0a0a]/20 mix-blend-multiply" />
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
 export default function App() {
   const { isLoginModalOpen, setIsLoginModalOpen } = useAuthModal();
@@ -512,29 +462,6 @@ return (
         <Route path="/admin/discounts" element={<Admin />} />
       </Routes>
 
-      {isHome && (
-        <>
-          <CampaignSection />
-
-          {/* Global Presence Section */}
-          <section className="py-[160px] bg-[#0a0a0a]">
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-                className="flex flex-row flex-wrap justify-center items-center gap-16 md:gap-32 text-[10px] uppercase tracking-[0.4em] font-serif text-[#EAE6E1]/50"
-              >
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">PARIS</span>
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">MILAN</span>
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">TOKYO</span>
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">NEW YORK</span>
-              </motion.div>
-            </div>
-          </section>
-        </>
-      )}
 
       {/* Footer */}
       <footer className="bg-[#0a0a0a] pt-[160px] pb-16 px-6 md:px-12 border-t border-[#C5A059]/10">
