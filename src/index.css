@@ -122,12 +122,11 @@ body[data-loading="true"] {
 
 /* Info row below the divider */
 .hero-info-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr 2fr;
-  gap: 1rem;
-  padding: 1.6rem 1.5rem 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 0;
   opacity: 0;
-  align-items: start;
 }
 
 .hero-info-label {
@@ -203,12 +202,8 @@ body[data-loading="true"] {
   }
 
   .hero-info-row {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1.6rem 1rem 4rem;
-  }
-
-  .hero-info-links {
-    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.2rem 1rem 0;
   }
 }

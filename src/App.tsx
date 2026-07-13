@@ -382,13 +382,50 @@ return (
         )}
       </AnimatePresence>
 
-      {/* Hero Section — OUTFIT-style typography */}
+      {/* Hero Section — centered layout with ZEVRAE animations */}
       {isHome && (
         <>
-          <section ref={heroRef} className="relative bg-[#0a0a0a] overflow-hidden">
-            {/* Giant ZEVRAE text */}
-            <div className="hero-typography-wrapper">
-              <h1 className="hero-brand-text" aria-label="ZEVRAE">
+          <section
+            ref={heroRef}
+            className="relative bg-[#0a0a0a] overflow-hidden min-h-screen flex flex-col items-center justify-center"
+          >
+            {/* ── PHOTO PLACEHOLDER — replace src with <video> when ready ── */}
+            <img
+              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=2074&auto=format&fit=crop"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: 'brightness(0.45) saturate(1.1)' }}
+            />
+            {/* Warm amber vignette to enhance yellow-black feel */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(197,160,89,0.08) 0%, rgba(10,10,10,0.75) 70%)' }}
+            />
+
+            {/* All hero text — sits above background layers */}
+            <div className="relative z-10 flex flex-col items-center">
+
+            {/* Season label */}
+            <p className="text-[10px] uppercase tracking-[0.4em] text-[#EAE6E1]/60 font-plex-mono mb-8">
+              AUTUMN / WINTER 2026
+            </p>
+
+            {/* ZEVRAE block: text + white line (line = same width as text) */}
+            <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch' }}>
+
+              {/* Giant ZEVRAE — letters slide up via GSAP */}
+              <h1
+                className="font-archivo font-extrabold uppercase text-[#EAE6E1] text-center"
+                style={{
+                  fontSize: 'clamp(3rem, 14vw, 18rem)',
+                  fontStretch: '125%',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 0.88,
+                  margin: 0,
+                }}
+                aria-label="ZEVRAE"
+              >
                 {HERO_LETTERS.map((letter, i) => (
                   <span key={`hero-${letter}-${i}`} className="inline-block overflow-hidden" style={{ lineHeight: 1 }}>
                     <span
@@ -400,43 +437,55 @@ return (
                   </span>
                 ))}
               </h1>
+
+              {/* White line — draws left→right, same width as ZEVRAE text */}
+              <div
+                className="hero-divider-line"
+                style={{
+                  height: '1.5px',
+                  background: '#EAE6E1',
+                  width: '100%',
+                  marginTop: '0.6rem',
+                }}
+              />
+
+              {/* Tagline — centered inside text width */}
+              <p
+                className="font-serif italic text-[#EAE6E1]/60 text-center"
+                style={{ fontSize: '0.9rem', marginTop: '1.4rem', letterSpacing: '0.01em' }}
+              >
+                The Architecture of Elegance
+              </p>
+
+              {/* Bottom row: links left + gold dot right */}
+              <div
+                className="hero-info-row"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1.8rem', paddingBottom: '0.5rem' }}
+              >
+                <div className="flex gap-10 text-[10px] uppercase tracking-[0.3em] font-plex-mono text-[#EAE6E1]/60">
+                  <button
+                    onClick={() => navTransition(() => navigate('/men'))}
+                    className="hover:text-[#EAE6E1] transition-colors duration-500"
+                  >
+                    View Collection
+                  </button>
+                  <button
+                    onClick={() => navTransition(() => navigate('/women'))}
+                    className="hover:text-[#EAE6E1] transition-colors duration-500"
+                  >
+                    Lookbook
+                  </button>
+                </div>
+                {/* Gold dot */}
+                <span
+                  className="block rounded-full flex-shrink-0"
+                  style={{ width: '7px', height: '7px', background: '#C5A059' }}
+                />
+              </div>
+
             </div>
 
-            {/* Registered trademark symbol */}
-            <div className="hero-trademark">
-              <span>®</span>
-            </div>
-
-            {/* Gold horizontal divider — draws left to right */}
-            <div className="hero-divider">
-              <div className="hero-divider-line" />
-            </div>
-
-            {/* Info row below divider */}
-            <div className="hero-info-row">
-              <div className="hero-info-col hero-info-brand">
-                <span className="hero-info-label">ZEVRAE</span>
-              </div>
-              <div className="hero-info-col hero-info-why">
-                <span className="hero-info-label">WHY</span>
-              </div>
-              <div className="hero-info-col hero-info-desc">
-                <p>
-                  Created by the Zevrae team, this store and signature collection
-                  celebrates our collective creativity and passion for apparel. Carefully
-                  designed.
-                </p>
-              </div>
-              <div className="hero-info-col hero-info-links">
-                <span className="hero-info-link-item">
-                  <button onClick={() => navTransition(() => navigate('/men'))}>VISIT COLLECTION</button>
-                </span>
-                <span className="hero-info-link-item">© {new Date().getFullYear()}</span>
-                <span className="hero-info-link-item">
-                  <button onClick={() => navTransition(() => navigate('/jewellery'))}>SHIPPING & RETURNS</button>
-                </span>
-              </div>
-            </div>
+            </div>{/* end z-10 wrapper */}
           </section>
 
           {/* Collection Scroller */}
