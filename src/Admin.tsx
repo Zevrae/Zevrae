@@ -807,7 +807,19 @@ function ProductsSection() {
 
             <div className="grid grid-cols-2 gap-3">
               <FormField label="Category">
-                <input value="Men" readOnly className={`${inputCls} opacity-50 cursor-not-allowed`} />
+                <select
+                  value={form.category}
+                  onChange={e => {
+                    const cat = e.target.value;
+                    const found = mockCategories.find(c => c.name === cat);
+                    setForm(f => ({ ...f, category: cat, subcategory: found?.subcategories[0] || '' }));
+                  }}
+                  className={selectCls}
+                >
+                  {mockCategories.map(c => (
+                    <option key={c.id} value={c.name}>{c.name}</option>
+                  ))}
+                </select>
               </FormField>
               <FormField label="Subcategory">
                 <select
@@ -815,8 +827,9 @@ function ProductsSection() {
                   onChange={e => setForm(f => ({ ...f, subcategory: e.target.value }))}
                   className={selectCls}
                 >
-                  <option>T-Shirts</option>
-                  <option>Lowers</option>
+                  {(mockCategories.find(c => c.name === form.category)?.subcategories || []).map(sub => (
+                    <option key={sub} value={sub}>{sub}</option>
+                  ))}
                 </select>
               </FormField>
             </div>

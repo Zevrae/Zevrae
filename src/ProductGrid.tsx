@@ -842,41 +842,48 @@ const jewelleryProducts = [
 ];
 export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter?: 'all' | 'men' | 'women' | 'jewellery' | 'rings' | 'pendants' | 'keychain' | 'bracelet' | 'toys' | 'earrings' | 'men-tshirts' | 'men-lowers' | 'women-tshirts' | 'women-lowers' }) {
   const navigate = useNavigate();
-  const displayWomenProducts = categoryFilter === 'all' ? womenProducts.slice(0, 3) : womenProducts;
-  const displayJewelleryProducts = categoryFilter === 'all' ? jewelleryProducts.slice(0, 3) : jewelleryProducts;
+  const allWomenProducts = [...womenProducts, ...dbWomenProducts];
+  const displayWomenProducts = categoryFilter === 'all' ? allWomenProducts.slice(0, 3) : allWomenProducts;
+  const allJewelleryProducts = [...jewelleryProducts, ...dbJewelleryProducts];
+  const displayJewelleryProducts = categoryFilter === 'all' ? allJewelleryProducts.slice(0, 3) : allJewelleryProducts;
 
-  const [dbMenProducts, setDbMenProducts] = useState<any[]>([]);
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    if (categoryFilter.startsWith('men')) {
-      const fetchDbProducts = async () => {
-        try {
-          const res = await fetch('/api/products?category=Men');
-          if (!res.ok) throw new Error('Failed to fetch products');
-          const data = await res.json();
-          
-          const formatted = (data || []).filter((p: any) => p.status === 'active').map((p: any) => ({
+    const fetchDbProducts = async () => {
+      try {
+        const res = await fetch('/api/products');
+        if (!res.ok) throw new Error('Failed to fetch products');
+        const data = await res.json();
+        
+        const formatted = (data || []).filter((p: any) => p.status === 'active').map((p: any) => {
+          const isJewellery = p.category?.toLowerCase() === 'jewellery';
+          return {
             id: p.id,
             name: p.name,
             price: p.price,
             originalPrice: p.compare_price,
-            label: 'Men Premium',
-            category: 'men',
-            gender: 'men',
-            type: p.subcategory?.toLowerCase() === 'lowers' ? 'lower' : 'tshirt',
+            label: `${p.category} Premium`,
+            category: isJewellery ? p.subcategory?.toLowerCase() : p.category?.toLowerCase() || '',
+            gender: p.category?.toLowerCase() || '',
+            type: p.subcategory?.toLowerCase() === 'lowers' ? 'lower' : (p.subcategory?.toLowerCase() || 'tshirt'),
             sizes: p.sizes,
             description: p.description,
             frontImg: p.images?.[0] || '',
             backImg: p.images?.[1] || p.images?.[0] || '',
-          }));
-          setDbMenProducts(formatted);
-        } catch (err) {
-          console.error('Failed to fetch DB products', err);
-        }
-      };
-      fetchDbProducts();
-    }
+          };
+        });
+        setDbProducts(formatted);
+      } catch (err) {
+        console.error('Failed to fetch DB products', err);
+      }
+    };
+    fetchDbProducts();
   }, [categoryFilter]);
+
+  const dbMenProducts = dbProducts.filter((p: any) => p.gender === 'men');
+  const dbWomenProducts = dbProducts.filter((p: any) => p.gender === 'women');
+  const dbJewelleryProducts = dbProducts.filter((p: any) => p.gender === 'jewellery');
 
   const openProduct = (product: any) => {
     navigate(`/product/${product.id}`, { state: { product } });
@@ -1054,7 +1061,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
             </motion.h3>
           </div>
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            {((categoryFilter.startsWith('men') ? [...products, ...dbMenProducts] : womenProducts)).filter(p => p.gender === (categoryFilter.startsWith('men') ? 'men' : 'women') && p.type === (categoryFilter.includes('tshirts') ? 'tshirt' : 'lower')).length === 0 ? (
+            {((categoryFilter.startsWith('men') ? [...products, ...dbMenProducts] : allWomenProducts)).filter(p => p.gender === (categoryFilter.startsWith('men') ? 'men' : 'women') && p.type === (categoryFilter.includes('tshirts') ? 'tshirt' : 'lower')).length === 0 ? (
               <div className="w-full flex justify-center py-24">
                 <h3 className="text-xl md:text-2xl font-serif tracking-[0.2em] text-[#EAE6E1]/50 uppercase">
                   New Collection Coming Soon
@@ -1062,7 +1069,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-                {((categoryFilter.startsWith('men') ? [...products, ...dbMenProducts] : womenProducts)).filter(p => p.gender === (categoryFilter.startsWith('men') ? 'men' : 'women') && p.type === (categoryFilter.includes('tshirts') ? 'tshirt' : 'lower')).map((item, i) => (
+                {((categoryFilter.startsWith('men') ? [...products, ...dbMenProducts] : allWomenProducts)).filter(p => p.gender === (categoryFilter.startsWith('men') ? 'men' : 'women') && p.type === (categoryFilter.includes('tshirts') ? 'tshirt' : 'lower')).map((item, i) => (
                   <motion.div 
                     key={item.id}
                     initial={{ opacity: 0, y: 30 }}
@@ -1291,7 +1298,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
           </div>
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-              {jewelleryProducts.filter(p => p.category === categoryFilter).map((item, i) => (
+              {allJewelleryProducts.filter(p => p.category === categoryFilter).map((item, i) => (
                 <motion.div 
                   key={item.id}
                   initial={{ opacity: 0, y: 30 }}
