@@ -80,7 +80,8 @@ export default function App() {
   const { scrollY } = useScroll();
   const { setIsCartOpen, items } = useCart();
   const { isLoading, hasCompletedOnce } = usePreloader();
-  const { trigger: navTransition } = usePageTransition();
+  const { trigger: navTransition, isTransitioning } = usePageTransition();
+  const isTransitioningRef = useRef(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
@@ -98,6 +99,11 @@ export default function App() {
   // Hero animation refs
   const heroRef = useRef<HTMLDivElement>(null);
   const heroAnimatedRef = useRef(false);
+
+  // Keep isTransitioningRef in sync so event handlers always read latest value
+  useEffect(() => {
+    isTransitioningRef.current = isTransitioning;
+  }, [isTransitioning]);
 
   useEffect(() => {
     const checkAdminStatus = async (u: any) => {
@@ -189,14 +195,15 @@ export default function App() {
     }
   };
 
-  // Reset + hide hero whenever location changes AWAY from home, so it's ready to animate on return
+  // When navigating TO home: always reset elements to hidden.
+  // Only auto-play immediately if there's NO active page transition
+  // (browser back button, direct URL, HMR — all have no curtain covering the page).
+  // NavTransition (clicking ZEVRAE/HOME) uses hero-reveal event instead.
   useEffect(() => {
-    if (isHome) {
-      // On home: hide immediately then run if already past preloader (HMR / direct nav)
-      resetHero();
-      if (hasCompletedOnce) {
-        setTimeout(runHeroAnimation, 50);
-      }
+    if (!isHome) return;
+    resetHero();
+    if (hasCompletedOnce && !isTransitioningRef.current) {
+      setTimeout(runHeroAnimation, 50);
     }
   }, [location.pathname]);
 
