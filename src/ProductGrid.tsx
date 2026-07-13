@@ -842,10 +842,6 @@ const jewelleryProducts = [
 ];
 export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter?: 'all' | 'men' | 'women' | 'jewellery' | 'rings' | 'pendants' | 'keychain' | 'bracelet' | 'toys' | 'earrings' | 'men-tshirts' | 'men-lowers' | 'women-tshirts' | 'women-lowers' }) {
   const navigate = useNavigate();
-  const allWomenProducts = [...womenProducts, ...dbWomenProducts];
-  const displayWomenProducts = categoryFilter === 'all' ? allWomenProducts.slice(0, 3) : allWomenProducts;
-  const allJewelleryProducts = [...jewelleryProducts, ...dbJewelleryProducts];
-  const displayJewelleryProducts = categoryFilter === 'all' ? allJewelleryProducts.slice(0, 3) : allJewelleryProducts;
 
   const [dbProducts, setDbProducts] = useState<any[]>([]);
 
@@ -866,7 +862,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
             label: `${p.category} Premium`,
             category: isJewellery ? p.subcategory?.toLowerCase() : p.category?.toLowerCase() || '',
             gender: p.category?.toLowerCase() || '',
-            type: p.subcategory?.toLowerCase() === 'lowers' ? 'lower' : (p.subcategory?.toLowerCase() || 'tshirt'),
+            type: p.subcategory?.toLowerCase() === 'lowers' ? 'lower' : (p.subcategory?.toLowerCase()?.includes('shirt') ? 'tshirt' : (p.subcategory?.toLowerCase() || 'tshirt')),
             sizes: p.sizes,
             description: p.description,
             frontImg: p.images?.[0] || '',
@@ -884,6 +880,11 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
   const dbMenProducts = dbProducts.filter((p: any) => p.gender === 'men');
   const dbWomenProducts = dbProducts.filter((p: any) => p.gender === 'women');
   const dbJewelleryProducts = dbProducts.filter((p: any) => p.gender === 'jewellery');
+
+  const allWomenProducts = [...womenProducts, ...dbWomenProducts];
+  const displayWomenProducts = categoryFilter === 'all' ? allWomenProducts.slice(0, 3) : allWomenProducts;
+  const allJewelleryProducts = [...jewelleryProducts, ...dbJewelleryProducts];
+  const displayJewelleryProducts = categoryFilter === 'all' ? allJewelleryProducts.slice(0, 3) : allJewelleryProducts;
 
   const openProduct = (product: any) => {
     navigate(`/product/${product.id}`, { state: { product } });
