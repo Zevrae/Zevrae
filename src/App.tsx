@@ -42,10 +42,10 @@ function CampaignSection() {
             CAMPAIGN
           </h2>
           <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif font-light mb-12 leading-tight text-[#EAE6E1] tracking-[0.05em]">
-            Autumn / Winter 2026
+            Summer / Spring 2026
           </h3>
           <p className="text-[#EAE6E1]/60 font-serif leading-relaxed text-[13px] md:text-[14px] max-w-md tracking-[0.02em]">
-            A study in architectural minimalism. The new collection explores the tension between structured tailoring and fluid drape, crafted from the finest European textiles. Each piece is designed with an uncompromising focus on form, function, and enduring elegance.
+            Luxury redefined for the modern connoisseur. This collection merges timeless sophistication with contemporary design, offering exclusive pieces that tell a story of refined taste and effortless elegance.
           </p>
         </motion.div>
 
@@ -408,7 +408,7 @@ return (
 
             {/* Season label */}
             <p className="text-[10px] uppercase tracking-[0.4em] text-[#EAE6E1]/60 font-plex-mono mb-8">
-              AUTUMN / WINTER 2026
+              SUMMER / SPRING 2026
             </p>
 
             {/* ZEVRAE block: text + white line (line = same width as text) */}
@@ -454,7 +454,7 @@ return (
                 className="font-serif italic text-[#EAE6E1]/60 text-center"
                 style={{ fontSize: '0.9rem', marginTop: '1.4rem', letterSpacing: '0.01em' }}
               >
-                The Architecture of Elegance
+                Luxury is a Matter of Choice
               </p>
 
               {/* Bottom row: links left + gold dot right */}
@@ -468,12 +468,6 @@ return (
                     className="hover:text-[#EAE6E1] transition-colors duration-500"
                   >
                     View Collection
-                  </button>
-                  <button
-                    onClick={() => navTransition(() => navigate('/women'))}
-                    className="hover:text-[#EAE6E1] transition-colors duration-500"
-                  >
-                    Lookbook
                   </button>
                 </div>
                 {/* Gold dot */}
