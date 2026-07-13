@@ -32,7 +32,7 @@ const collections: Collection[] = [
     route: '/men',
     bgColor: '#0e0e0e',
     image: 'https://i.ibb.co/k6VLyf0x/CARNAGE-FRONT.png',
-    itemCount: 14,
+    itemCount:   0,
   },
   {
     id: 'women',

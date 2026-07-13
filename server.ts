@@ -138,7 +138,7 @@ async function startServer() {
   const upload = multer({ storage: storage });
 
   app.post("/api/upload", (req, res, next) => {
-    upload.array("images", 5)(req, res, (err) => {
+    upload.array("images", 10)(req, res, (err) => {
       if (err) {
         console.error("Multer upload error:", err);
         return res.status(500).json({ error: err.message || "Upload failed" });
