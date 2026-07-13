@@ -17,50 +17,6 @@ const mensCategories = [
   }
 ];
 const womenProducts = [
-  { 
-    id: 'w1', 
-    name: 'FAST AND FURIOUS', 
-    price: 399, 
-    label: 'Women Premium', 
-    category: 'women',
-    gender: 'women',
-    type: 'tshirt',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    frontImg: 'https://i.ibb.co/v4yYjxhm/FAST-AND-FURIOUS-BACK.png', 
-  },
-  { 
-    id: 'w2', 
-    name: 'LIGHTNING MCQUEEN BLACK', 
-    price: 399, 
-    label: 'Women Premium', 
-    category: 'women',
-    gender: 'women',
-    type: 'tshirt',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    frontImg: 'https://i.ibb.co/21qqDjDv/LIGHTNING-MCQUEEN-BLACK.png', 
-  },
-  { 
-    id: 'w3', 
-    name: 'LIGHTNING MCQUEEN BLUE', 
-    price: 399, 
-    label: 'Women Premium', 
-    category: 'women',
-    gender: 'women',
-    type: 'tshirt',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    frontImg: 'https://i.ibb.co/Q7DfTKPr/LIGHTNING-MCQUEEN-BLUE.png', 
-  },
-  { 
-    id: 'w4', 
-    name: 'LIGHTNING MCQUEEN SKIN', 
-    price: 399, 
-    label: 'Women Premium', 
-    category: 'women',
-    gender: 'women',
-    type: 'tshirt',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    frontImg: 'https://i.ibb.co/gMYJmdFT/LIGHTNING-MCQUEEN-SKIN.png', 
-  }
 ];
 const womensCategories = [
   {
