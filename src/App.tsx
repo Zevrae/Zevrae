@@ -468,7 +468,7 @@ return (
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8 mb-32">
             <div className="col-span-1 md:col-span-4">
-              <h2 className="text-xl font-serif font-light tracking-[0.3em] mb-12 text-[#EAE6E1]">ZEVRAE</h2>
+              <h2 className="text-xl md:text-3xl font-archivo font-bold tracking-[0.1em] mb-12 text-[#EAE6E1]" style={{ fontStretch: '125%' }}>ZEVRAE</h2>
               <div className="mt-8 flex border-b border-[#EAE6E1]/20 pb-3 max-w-xs group focus-within:border-[#C5A059]/40 transition-colors duration-700">
                 <input 
                   type="email" 
