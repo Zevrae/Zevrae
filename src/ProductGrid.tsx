@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
+import ProductCardSober from './components/ProductCardSober';
 const products = [];
 const mensCategories = [
   {
@@ -742,63 +743,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               </motion.h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
                 {dbMenProducts.map((item, i) => (
-                  <motion.div 
-                    key={item.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.8, delay: (i % 3) * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="group relative flex flex-col cursor-pointer"
-                    onClick={() => openProduct(item)}
-                  >
-                    <div className="relative aspect-[3/4] mb-6 bg-[#111111] rounded-sm overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-3 group-hover:shadow-[0_10px_40px_-10px_rgba(197,160,89,0.25)]" data-cursor-image>
-                      
-                      {item.frontImg ? (
-                        <img 
-                          src={item.frontImg} 
-                          alt={item.name} 
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                          referrerPolicy="no-referrer"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 w-full h-full flex items-center justify-center text-[#EAE6E1]/20 font-serif tracking-widest uppercase text-xs">
-                          Image Pending
-                        </div>
-                      )}
-                      
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-[#EAE6E1]/10 px-3 py-1.5 rounded-full z-10">
-                        <span className="text-[9px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/80">
-                          {item.label}
-                        </span>
-                      </div>
-                      {item.discount && (
-                        <div className="absolute top-4 right-4 bg-[#C5A059] px-2 py-1 rounded-sm shadow-lg z-10">
-                          <span className="text-[10px] uppercase font-bold tracking-wider text-[#12100C]">
-                            {item.discount}
-                          </span>
-                        </div>
-                      )}
-                      <div className="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                        <button className="w-full bg-[#EAE6E1] text-[#12100C] py-3 flex items-center justify-center space-x-2 hover:bg-[#C5A059] transition-colors duration-300 rounded-sm">
-                          <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Quick View</span>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="flex flex-col space-y-2 px-1">
-                      <div className="flex justify-between items-start">
-                        <h3 className="font-serif font-medium text-[13px] tracking-[0.1em] text-[#EAE6E1] group-hover:text-[#C5A059] transition-colors duration-300 uppercase leading-tight pr-4">
-                          {item.name}
-                        </h3>
-                        <div className="flex flex-col items-end">
-                          <span className="text-[13px] font-mono tracking-wider text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(item.price)}</span>
-                          {item.originalPrice && (
-                            <span className="text-[10px] font-mono tracking-wider text-[#EAE6E1]/50 line-through">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(item.originalPrice as number)}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                  <ProductCardSober key={item.id} product={item} index={i} onClick={() => openProduct(item)} />
                 ))}
               </div>
             </div>
@@ -846,64 +791,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
                 {((categoryFilter.startsWith('men') ? [...products, ...dbMenProducts] : allWomenProducts)).filter(p => p.gender === (categoryFilter.startsWith('men') ? 'men' : 'women') && p.type === (categoryFilter.includes('tshirts') ? 'tshirt' : 'lower')).map((item, i) => (
-                  <motion.div 
-                    key={item.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.8, delay: (i % 3) * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="group relative flex flex-col cursor-pointer"
-                    onClick={() => openProduct(item)}
-                  >
-                    <div className="relative aspect-[3/4] mb-6 bg-[#111111] rounded-sm overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-3 group-hover:shadow-[0_10px_40px_-10px_rgba(197,160,89,0.25)]" data-cursor-image>
-                      
-                      {item.frontImg ? (
-                        <img 
-                          src={item.frontImg} 
-                          alt={item.name} 
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                          referrerPolicy="no-referrer"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 w-full h-full flex items-center justify-center text-[#EAE6E1]/20 font-serif tracking-widest uppercase text-xs">
-                          Image Pending
-                        </div>
-                      )}
-                      
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-[#EAE6E1]/10 px-3 py-1.5 rounded-full z-10">
-                        <span className="text-[9px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/80">
-                          {item.label}
-                        </span>
-                      </div>
-                      {/* Discount Badge */}
-                      {('discount' in item && item.discount) && (
-                        <div className="absolute top-4 right-4 bg-[#C5A059] px-2 py-1 rounded-sm shadow-lg z-10">
-                          <span className="text-[10px] uppercase font-bold tracking-wider text-[#12100C]">
-                            {item.discount}
-                          </span>
-                        </div>
-                      )}
-                      <div className="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                        <button className="w-full bg-[#EAE6E1] text-[#12100C] py-3 flex items-center justify-center space-x-2 hover:bg-[#C5A059] transition-colors duration-300 rounded-sm">
-                          <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Quick View</span>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="flex flex-col space-y-2 px-1">
-                      <div className="flex justify-between items-start">
-                        <h3 className="font-serif font-medium text-[13px] tracking-[0.1em] text-[#EAE6E1] group-hover:text-[#C5A059] transition-colors duration-300 uppercase leading-tight pr-4">
-                          {item.name}
-                        </h3>
-                        <div className="flex flex-col items-end">
-                          <span className="text-[13px] font-mono tracking-wider text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(item.price)}</span>
-                          {('originalPrice' in item && item.originalPrice) && (
-                            <span className="text-[10px] font-mono tracking-wider text-[#EAE6E1]/50 line-through">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(item.originalPrice as number)}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                  <ProductCardSober key={item.id} product={item} index={i} onClick={() => openProduct(item)} />
                 ))}
               </div>
             )}
@@ -1075,76 +963,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
               {allJewelleryProducts.filter(p => p.category === categoryFilter).map((item, i) => (
-                <motion.div 
-                  key={item.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.8, delay: (i % 3) * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="group relative flex flex-col cursor-pointer"
-                  onClick={() => openProduct(item)}
-                >
-                  {/* Antigravity & Glow Container */}
-                  <div className="relative aspect-[3/4] mb-6 bg-[#111111] rounded-sm overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-3 group-hover:shadow-[0_10px_40px_-10px_rgba(197,160,89,0.25)]" data-cursor-image>
-                    
-                    {/* Image with Zoom */}
-                    {item.frontImg ? (
-                      <img 
-                        src={item.frontImg} 
-                        alt={item.name} 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 w-full h-full flex items-center justify-center text-[#EAE6E1]/20 font-serif tracking-widest uppercase text-xs">
-                        Image Pending
-                      </div>
-                    )}
-                    
-                    {/* Overlay Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    {/* Category Label Badge */}
-                    <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-[#EAE6E1]/10 px-3 py-1.5 rounded-full z-10">
-                      <span className="text-[9px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/80">
-                        {item.label}
-                      </span>
-                    </div>
-                    {/* Discount Badge */}
-                    {('discount' in item && item.discount) && (
-                      <div className="absolute top-4 right-4 bg-[#C5A059] px-2 py-1 rounded-sm shadow-lg z-10">
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-[#12100C]">
-                          {item.discount}
-                        </span>
-                      </div>
-                    )}
-                    {/* Quick View Button (Appears on Hover) */}
-                    <div className="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openProduct(item);
-                        }}
-                        className="w-full bg-[#EAE6E1] text-[#12100C] py-3 flex items-center justify-center space-x-2 hover:bg-[#C5A059] transition-colors duration-300 rounded-sm"
-                      >
-                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Quick View</span>
-                      </button>
-                    </div>
-                  </div>
-                  {/* Product Info */}
-                  <div className="flex flex-col space-y-2 px-1">
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-serif font-medium text-[13px] tracking-[0.1em] text-[#EAE6E1] group-hover:text-[#C5A059] transition-colors duration-300 uppercase leading-tight pr-4">
-                        {item.name}
-                      </h3>
-                      <div className="flex flex-col items-end">
-                        <span className="text-[13px] font-mono tracking-wider text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(item.price)}</span>
-                        {('originalPrice' in item && item.originalPrice) && (
-                          <span className="text-[10px] font-mono tracking-wider text-[#EAE6E1]/50 line-through">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(item.originalPrice as number)}</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+                <ProductCardSober key={item.id} product={item} index={i} onClick={() => openProduct(item)} />
               ))}
             </div>
           </div>
