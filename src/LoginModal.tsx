@@ -74,13 +74,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </button>
 
             <div className="text-center mb-10">
-              <h1 className="text-sm font-serif font-light tracking-[0.4em] text-[#C5A059] mb-6 uppercase">
+              <h1 className="text-sm font-plex-mono font-light tracking-[0.4em] text-[#C5A059] mb-6 uppercase">
                 ZEVRAE
               </h1>
-              <h2 className="text-2xl md:text-3xl font-serif font-light tracking-[0.2em] text-[#EAE6E1] mb-3 uppercase">
+              <h2 className="text-2xl md:text-3xl font-archivo font-bold tracking-[0.2em] text-[#EAE6E1] mb-3 uppercase">
                 CLIENT ACCESS
               </h2>
-              <p className="text-[12px] font-serif tracking-[0.05em] text-[#EAE6E1]/50">
+              <p className="text-[12px] font-plex-mono tracking-[0.05em] text-[#EAE6E1]/50">
                 Access your personal ZEVRAE account
               </p>
             </div>
@@ -89,7 +89,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               type="button"
               onClick={handleGoogleSignIn}
               disabled={loading}
-              className="w-full py-4 px-6 bg-transparent border border-[#C5A059]/40 hover:border-[#C5A059] text-[#EAE6E1] text-[12px] tracking-[0.1em] font-serif hover:bg-[#C5A059]/5 hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 rounded-sm group relative overflow-hidden"
+              className="w-full py-4 px-6 bg-transparent border border-[#C5A059]/40 hover:border-[#C5A059] text-[#EAE6E1] text-[12px] tracking-[0.1em] font-plex-mono hover:bg-[#C5A059]/5 hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 rounded-sm group relative overflow-hidden"
             >
               <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg" className="relative z-10">
                 <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
@@ -103,7 +103,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </button>
 
             <div className="mt-10 text-center">
-              <p className="text-[10px] font-serif uppercase tracking-[0.1em] text-[#EAE6E1]/30">
+              <p className="text-[10px] font-plex-mono uppercase tracking-[0.1em] text-[#EAE6E1]/30">
                 By continuing you agree to our Terms & Privacy Policy
               </p>
             </div>

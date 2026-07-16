@@ -689,7 +689,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-4 text-center md:text-left"
+              className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-4 text-center md:text-left"
             >
               LATEST DROPS
             </motion.h2>
@@ -698,7 +698,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-3xl md:text-5xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
+              className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
             >
               Men's Collection
             </motion.h3>
@@ -726,7 +726,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
                     
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <h3 className="text-3xl font-serif font-light tracking-[0.2em] text-[#EAE6E1] uppercase">
+                      <h3 className="text-3xl font-archivo font-bold tracking-[0.2em] text-[#EAE6E1] uppercase">
                         {item.name}
                       </h3>
                     </div>
@@ -742,7 +742,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-                className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-8 text-center md:text-left"
+                className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-8 text-center md:text-left"
               >
                 FROM OUR CATALOG
               </motion.h2>
@@ -771,7 +771,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-4 text-center md:text-left"
+              className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-4 text-center md:text-left"
             >
               {categoryFilter.startsWith('men') ? "MEN'S COLLECTION" : "WOMEN'S COLLECTION"}
             </motion.h2>
@@ -780,7 +780,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-3xl md:text-5xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
+              className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
             >
               {categoryFilter.startsWith('men') ? "MEN'S " : "WOMEN'S "}
               {categoryFilter.includes('tshirts') ? 'TSHIRTS' : 'LOWERS'}
@@ -789,7 +789,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             {((categoryFilter.startsWith('men') ? [...products, ...dbMenProducts] : allWomenProducts)).filter(p => p.gender === (categoryFilter.startsWith('men') ? 'men' : 'women') && p.type === (categoryFilter.includes('tshirts') ? 'tshirt' : 'lower')).length === 0 ? (
               <div className="w-full flex justify-center py-24">
-                <h3 className="text-xl md:text-2xl font-serif tracking-[0.2em] text-[#EAE6E1]/50 uppercase">
+                <h3 className="text-xl md:text-2xl font-archivo font-bold tracking-[0.2em] text-[#EAE6E1]/50 uppercase">
                   New Collection Coming Soon
                 </h3>
               </div>
@@ -825,7 +825,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-4 text-center md:text-left"
+              className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-4 text-center md:text-left"
             >
               NEW ARRIVALS
             </motion.h2>
@@ -834,7 +834,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-3xl md:text-5xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
+              className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
             >
               Women's Collection
             </motion.h3>
@@ -862,7 +862,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
                     
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <h3 className="text-3xl font-serif font-light tracking-[0.2em] text-[#EAE6E1] uppercase">
+                      <h3 className="text-3xl font-archivo font-bold tracking-[0.2em] text-[#EAE6E1] uppercase">
                         {item.name}
                       </h3>
                     </div>
@@ -889,7 +889,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-4 text-center md:text-left"
+              className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-4 text-center md:text-left"
             >
               NEW ARRIVALS
             </motion.h2>
@@ -898,7 +898,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-3xl md:text-5xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
+              className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
             >
               ACCESSORIES COLLECTION
             </motion.h3>
@@ -926,7 +926,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
                     
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <h3 className="text-3xl font-serif font-light tracking-[0.2em] text-[#EAE6E1] uppercase">
+                      <h3 className="text-3xl font-archivo font-bold tracking-[0.2em] text-[#EAE6E1] uppercase">
                         {item.name}
                       </h3>
                     </div>
@@ -953,7 +953,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-4 text-center md:text-left"
+              className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-4 text-center md:text-left"
             >
               NEW ARRIVALS
             </motion.h2>
@@ -962,7 +962,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-3xl md:text-5xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
+              className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
             >
               JEWELLERY COLLECTION
             </motion.h3>
@@ -994,7 +994,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
                     {/* Centered Text */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <h3 className="text-2xl font-serif font-light tracking-[0.2em] text-[#EAE6E1] uppercase">
+                      <h3 className="text-2xl font-archivo font-bold tracking-[0.2em] text-[#EAE6E1] uppercase">
                         {item.name}
                       </h3>
                     </div>
@@ -1021,7 +1021,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-4 text-center md:text-left"
+              className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-4 text-center md:text-left"
             >
               JEWELLERY
             </motion.h2>
@@ -1030,7 +1030,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-3xl md:text-5xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
+              className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
             >
               {categoryFilter}
             </motion.h3>
@@ -1060,7 +1060,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-[12px] uppercase tracking-[0.4em] font-serif text-[#C5A059] mb-4 text-center md:text-left"
+              className="text-[12px] uppercase tracking-[0.4em] font-plex-mono text-[#C5A059] mb-4 text-center md:text-left"
             >
               ACCESSORIES
             </motion.h2>
@@ -1069,7 +1069,7 @@ export default function ProductGrid({ categoryFilter = 'all' }: { categoryFilter
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-3xl md:text-5xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
+              className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] text-center md:text-left uppercase"
             >
               {categoryFilter}
             </motion.h3>

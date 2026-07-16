@@ -257,12 +257,12 @@ export default function CheckoutPage() {
       <div className="max-w-[1200px] mx-auto px-6 mb-12 flex items-center justify-between">
         <button 
           onClick={() => step > 2 ? setStep((prev) => (prev - 1) as 2 | 3 | 4) : navigate('/')}
-          className="flex items-center text-[10px] uppercase font-serif tracking-[0.2em] text-[#EAE6E1]/50 hover:text-[#C5A059] transition-colors"
+          className="flex items-center text-[10px] uppercase font-plex-mono tracking-[0.2em] text-[#EAE6E1]/50 hover:text-[#C5A059] transition-colors"
         >
           <ChevronLeft size={16} className="mr-2" />
           {step === 4 ? "Back to Home" : "Back"}
         </button>
-        <h1 className="text-2xl md:text-3xl font-serif font-light tracking-[0.3em] uppercase text-center flex-1">
+        <h1 className="text-2xl md:text-3xl font-archivo font-bold tracking-[0.3em] uppercase text-center flex-1">
           ZEVRAE
         </h1>
         <div className="w-20" /> {/* Spacer */}
@@ -273,15 +273,15 @@ export default function CheckoutPage() {
           <div className="flex justify-between items-center relative z-10">
             <div className={`flex flex-col items-center gap-2 ${step >= 2 ? 'text-[#C5A059]' : 'text-[#EAE6E1]/30'}`}>
               <div className={`w-3 h-3 rounded-full ${step >= 2 ? 'bg-[#C5A059]' : 'bg-[#EAE6E1]/30'}`} />
-              <span className="text-[10px] uppercase font-serif tracking-[0.2em]">Shipping</span>
+              <span className="text-[10px] uppercase font-plex-mono tracking-[0.2em]">Shipping</span>
             </div>
             <div className={`flex flex-col items-center gap-2 ${step >= 3 ? 'text-[#C5A059]' : 'text-[#EAE6E1]/30'}`}>
               <div className={`w-3 h-3 rounded-full ${step >= 3 ? 'bg-[#C5A059]' : 'bg-[#EAE6E1]/30'}`} />
-              <span className="text-[10px] uppercase font-serif tracking-[0.2em]">Payment</span>
+              <span className="text-[10px] uppercase font-plex-mono tracking-[0.2em]">Payment</span>
             </div>
             <div className={`flex flex-col items-center gap-2 ${step >= 4 ? 'text-[#C5A059]' : 'text-[#EAE6E1]/30'}`}>
               <div className={`w-3 h-3 rounded-full ${step >= 4 ? 'bg-[#C5A059]' : 'bg-[#EAE6E1]/30'}`} />
-              <span className="text-[10px] uppercase font-serif tracking-[0.2em]">Confirm</span>
+              <span className="text-[10px] uppercase font-plex-mono tracking-[0.2em]">Confirm</span>
             </div>
           </div>
           <div className="absolute top-1.5 left-[10%] right-[10%] h-[1px] bg-[#EAE6E1]/10 -z-0">
@@ -309,8 +309,8 @@ export default function CheckoutPage() {
                 transition={{ duration: 0.4 }}
               >
                 <div className="mb-10">
-                  <h2 className="text-2xl font-serif font-light tracking-[0.1em] text-[#C5A059] mb-2 uppercase">Shipping Details</h2>
-                  <p className="text-[12px] text-[#EAE6E1]/50 uppercase tracking-[0.1em] font-serif">Enter your delivery address</p>
+                  <h2 className="text-2xl font-archivo font-bold tracking-[0.1em] text-[#C5A059] mb-2 uppercase">Shipping Details</h2>
+                  <p className="text-[12px] text-[#EAE6E1]/50 uppercase tracking-[0.1em] font-plex-mono">Enter your delivery address</p>
                 </div>
 
                 <form className="space-y-6" onSubmit={(e) => { 
@@ -325,7 +325,7 @@ export default function CheckoutPage() {
                 }}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2">First Name</label>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2">First Name</label>
                       <input 
                         type="text" 
                         name="firstName" 
@@ -339,7 +339,7 @@ export default function CheckoutPage() {
                       )}
                     </div>
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2">Last Name</label>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2">Last Name</label>
                       <input 
                         type="text" 
                         name="lastName" 
@@ -355,7 +355,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2">Email Address</label>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2">Email Address</label>
                       <input 
                         type="email" 
                         name="email" 
@@ -369,7 +369,7 @@ export default function CheckoutPage() {
                       )}
                     </div>
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2">Phone Number</label>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2">Phone Number</label>
                       <input 
                         type="tel" 
                         name="phone" 
@@ -384,7 +384,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2">Address</label>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2">Address</label>
                     <input 
                       type="text" 
                       name="address" 
@@ -399,7 +399,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2">City</label>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2">City</label>
                       <input 
                         type="text" 
                         name="city" 
@@ -413,7 +413,7 @@ export default function CheckoutPage() {
                       )}
                     </div>
                     <div>
-                      <label className="block text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2">Postal Code</label>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2">Postal Code</label>
                       <input 
                         type="text" 
                         name="postalCode" 
@@ -453,8 +453,8 @@ export default function CheckoutPage() {
                 transition={{ duration: 0.4 }}
               >
                 <div className="mb-10">
-                  <h2 className="text-3xl font-serif font-light tracking-[0.1em] text-[#C5A059] mb-2 uppercase">Secure Checkout</h2>
-                  <p className="text-[12px] text-[#EAE6E1]/50 uppercase tracking-[0.1em] font-serif">Choose Your Payment Method</p>
+                  <h2 className="text-3xl font-archivo font-bold tracking-[0.1em] text-[#C5A059] mb-2 uppercase">Secure Checkout</h2>
+                  <p className="text-[12px] text-[#EAE6E1]/50 uppercase tracking-[0.1em] font-plex-mono">Choose Your Payment Method</p>
                 </div>
 
                 <form onSubmit={handlePaymentSubmit}>
@@ -472,7 +472,7 @@ export default function CheckoutPage() {
                             </div>
                             <div className="flex items-center gap-3">
                               {method.icon}
-                              <span className="text-[12px] sm:text-[14px] uppercase tracking-[0.1em] font-serif text-[#EAE6E1]">{method.name}</span>
+                              <span className="text-[12px] sm:text-[14px] uppercase tracking-[0.1em] font-plex-mono text-[#EAE6E1]">{method.name}</span>
                             </div>
                           </div>
                           <div className="flex items-center gap-3 pl-8 sm:pl-0">
@@ -555,15 +555,15 @@ export default function CheckoutPage() {
                   <div className="absolute inset-0 bg-[#C5A059]/10 rounded-full animate-pulse" />
                   <CheckCircle2 size={40} className="text-[#C5A059]" />
                 </div>
-                <h2 className="text-3xl md:text-4xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] mb-4 uppercase">
+                <h2 className="text-3xl md:text-4xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] mb-4 uppercase">
                   Your Order Has Been Placed Successfully
                 </h2>
-                <p className="text-[14px] text-[#C5A059] uppercase tracking-[0.2em] font-serif mb-12">
+                <p className="text-[14px] text-[#C5A059] uppercase tracking-[0.2em] font-plex-mono mb-12">
                   Thank you for shopping with ZEVRAE
                 </p>
                 <button 
                   onClick={() => navigate('/')}
-                  className="bg-[#111] border border-[#C5A059]/30 hover:border-[#C5A059] text-[#EAE6E1] px-8 py-4 text-[11px] uppercase tracking-[0.2em] font-serif transition-all duration-300"
+                  className="bg-[#111] border border-[#C5A059]/30 hover:border-[#C5A059] text-[#EAE6E1] px-8 py-4 text-[11px] uppercase tracking-[0.2em] font-plex-mono transition-all duration-300"
                 >
                   Continue Browsing
                 </button>
@@ -576,7 +576,7 @@ export default function CheckoutPage() {
         {step !== 4 && (
           <div className="lg:col-span-5">
             <div className="bg-[#111] border border-[#C5A059]/20 p-8 rounded-sm sticky top-32">
-              <h3 className="text-[13px] uppercase tracking-[0.3em] font-serif text-[#C5A059] mb-8">Order Summary</h3>
+              <h3 className="text-[13px] uppercase tracking-[0.3em] font-plex-mono text-[#C5A059] mb-8">Order Summary</h3>
               
               <div className="space-y-4 mb-8 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                 {items.map(item => (
@@ -588,7 +588,7 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                     <div className="flex-1 flex flex-col justify-center">
-                      <h4 className="text-[12px] uppercase font-serif tracking-[0.1em] text-[#EAE6E1] mb-1 line-clamp-1">{item.name}</h4>
+                      <h4 className="text-[12px] uppercase font-plex-mono tracking-[0.1em] text-[#EAE6E1] mb-1 line-clamp-1">{item.name}</h4>
                       <div className="text-[10px] uppercase font-mono text-[#EAE6E1]/50 mb-1">Size: {item.size}</div>
                       <div className="text-[12px] font-mono text-[#EAE6E1]">{formatVal(item.price * item.quantity)}</div>
                     </div>
@@ -597,15 +597,15 @@ export default function CheckoutPage() {
               </div>
 
               <div className="space-y-4 border-t border-[#EAE6E1]/10 pt-6">
-                <div className="flex justify-between items-center text-[11px] uppercase tracking-wider font-serif text-[#EAE6E1]/70">
+                <div className="flex justify-between items-center text-[11px] uppercase tracking-wider font-plex-mono text-[#EAE6E1]/70">
                   <span>Subtotal</span>
                   <span className="font-mono text-[#EAE6E1]">{formatVal(subtotal)}</span>
                 </div>
-                <div className="flex justify-between items-center text-[11px] uppercase tracking-wider font-serif text-[#EAE6E1]/70">
+                <div className="flex justify-between items-center text-[11px] uppercase tracking-wider font-plex-mono text-[#EAE6E1]/70">
                   <span>Shipping</span>
                   <span className="font-mono text-[#EAE6E1]">{shipping === 0 ? 'Free' : formatVal(shipping)}</span>
                 </div>
-                <div className="flex justify-between items-center text-[14px] uppercase tracking-[0.2em] font-serif text-[#C5A059] pt-4 border-t border-[#C5A059]/20 mt-4">
+                <div className="flex justify-between items-center text-[14px] uppercase tracking-[0.2em] font-plex-mono text-[#C5A059] pt-4 border-t border-[#C5A059]/20 mt-4">
                   <span>Total</span>
                   <span className="font-mono">{formatVal(total)}</span>
                 </div>

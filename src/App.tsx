@@ -419,7 +419,7 @@ return (
 
               {/* Tagline — centered inside text width */}
               <p
-                className="font-serif italic text-[#EAE6E1]/60 text-center"
+                className="font-sans italic text-[#EAE6E1]/60 text-center"
                 style={{ fontSize: '0.9rem', marginTop: '1.4rem', letterSpacing: '0.01em' }}
               >
                 Luxury is a Matter of Choice

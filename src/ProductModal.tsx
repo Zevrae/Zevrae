@@ -110,7 +110,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-[#EAE6E1]/20 font-serif tracking-widest uppercase text-sm">
+                <div className="w-full h-full flex items-center justify-center text-[#EAE6E1]/20 font-sans tracking-widest uppercase text-sm">
                   Image Unavailable
                 </div>
               )}
@@ -150,10 +150,10 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
           {/* Product Details */}
           <div className="w-full md:w-1/2 p-5 sm:p-6 md:p-12 flex flex-col overflow-y-auto pb-[90px] md:pb-12">
             <div className="mb-4 md:mb-8">
-              <span className="text-[10px] uppercase tracking-[0.3em] font-serif text-[#C5A059] mb-1 sm:mb-2 block">
+              <span className="text-[10px] uppercase tracking-[0.3em] font-plex-mono text-[#C5A059] mb-1 sm:mb-2 block">
                 {product.label}
               </span>
-              <h2 className="text-xl sm:text-2xl md:text-4xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] uppercase leading-tight mb-1 sm:mb-4">
+              <h2 className="text-xl sm:text-2xl md:text-4xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] uppercase leading-tight mb-1 sm:mb-4">
                 {product.name}
               </h2>
               <p className="text-lg sm:text-xl font-mono text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(product.price)}</p>
@@ -162,7 +162,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             {/* Size Selector */}
             <div className="mb-5 md:mb-8 mt-2 md:mt-0">
               <div className="flex justify-between items-center mb-3 sm:mb-4">
-                <span className="text-[11px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70">Size</span>
+                <span className="text-[11px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70">Size</span>
                 <button className="text-[10px] uppercase tracking-[0.1em] text-[#EAE6E1]/40 hover:text-[#EAE6E1] underline underline-offset-4">Size Guide</button>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -174,7 +174,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     onClick={() => setSelectedSize(size)}
                     className={`transition-all duration-300 border ${
                       isLongSize 
-                        ? 'flex items-center justify-center text-center px-4 tracking-[0.5px] rounded box-border overflow-hidden whitespace-nowrap w-[130px] md:w-[140px] h-[48px] md:h-[52px] text-[16px] md:text-[18px] align-middle font-serif font-light' 
+                        ? 'flex items-center justify-center text-center px-4 tracking-[0.5px] rounded box-border overflow-hidden whitespace-nowrap w-[130px] md:w-[140px] h-[48px] md:h-[52px] text-[16px] md:text-[18px] align-middle font-sans font-light' 
                         : 'py-2 px-3 sm:py-3 sm:px-4 text-[12px] font-mono min-w-[3rem]'
                     } ${
                       selectedSize === size 
@@ -194,7 +194,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             {/* Quantity Selector */}
             <div className="mb-6 md:mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <span className="text-[11px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2 sm:mb-4 block">Quantity</span>
+                <span className="text-[11px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2 sm:mb-4 block">Quantity</span>
                 <div className="flex items-center border border-[#EAE6E1]/20 w-fit">
                   <button 
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -215,7 +215,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               {/* Total Price (Mobile) / Desktop */}
               <div className="mt-4 sm:mt-0 pt-4 sm:pt-0 sm:ml-auto">
                 <div className="hidden md:flex flex-col items-end">
-                   <span className="text-[11px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-4 block">Total</span>
+                   <span className="text-[11px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-4 block">Total</span>
                    <span className="text-xl font-mono text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(product.price * quantity)}</span>
                 </div>
               </div>
@@ -223,14 +223,14 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
             {/* Total Price (Desktop fallback) */}
             <div className="md:hidden flex justify-between items-center mb-6 py-4 border-t border-b border-[#EAE6E1]/10">
-              <span className="text-[12px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70">Total</span>
+              <span className="text-[12px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70">Total</span>
               <span className="text-xl font-mono text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(product.price * quantity)}</span>
             </div>
 
             {/* Actions Desktop */}
             <div className="hidden md:flex flex-col gap-4 mt-auto">
               {!selectedSize && (
-                <p className="text-red-400 text-xs font-serif tracking-widest text-center">Please select a size</p>
+                <p className="text-red-400 text-xs font-plex-mono tracking-widest text-center">Please select a size</p>
               )}
               <button 
                 onClick={handleAddToCart}

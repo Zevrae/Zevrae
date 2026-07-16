@@ -84,7 +84,7 @@ export const Home: React.FC = () => {
         </h1>
 
         {/* Tagline */}
-        <p className="font-serif italic text-[#EAE6E1]/60 text-sm md:text-base tracking-wide mb-12">
+        <p className="font-sans italic text-[#EAE6E1]/60 text-sm md:text-base tracking-wide mb-12">
           The Architecture of Elegance
         </p>
 
@@ -131,7 +131,7 @@ export const Home: React.FC = () => {
       <section className="py-32 px-6 max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">Women's Collection</h2>
+            <h2 className="text-3xl font-archivo font-bold tracking-widest uppercase mb-4">Women's Collection</h2>
             <p className="text-sm text-gray-500 tracking-wider">Curated pieces for the modern silhouette.</p>
           </div>
           <Link 
@@ -170,7 +170,7 @@ export const Home: React.FC = () => {
       <section className="py-32 px-6 max-w-7xl mx-auto border-t border-white/5">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">Men's Collection</h2>
+            <h2 className="text-3xl font-archivo font-bold tracking-widest uppercase mb-4">Men's Collection</h2>
             <p className="text-sm text-gray-500 tracking-wider">Refined tailoring and elevated essentials.</p>
           </div>
           <Link 

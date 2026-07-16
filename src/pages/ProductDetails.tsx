@@ -22,7 +22,7 @@ export const ProductDetails: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-serif tracking-widest uppercase mb-4">Product Not Found</h2>
+          <h2 className="text-2xl font-archivo font-bold tracking-widest uppercase mb-4">Product Not Found</h2>
           <Link to="/" className="text-xs uppercase tracking-widest border-b border-white pb-1">Return Home</Link>
         </div>
       </div>
@@ -116,7 +116,7 @@ export const ProductDetails: React.FC = () => {
               transition={{ duration: 0.6 }}
             >
               <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest mb-2 md:mb-4">{product.category}</p>
-              <h1 className="text-2xl md:text-4xl font-serif tracking-widest uppercase mb-2 md:mb-4">{product.name}</h1>
+              <h1 className="text-2xl md:text-4xl font-archivo font-bold tracking-widest uppercase mb-2 md:mb-4">{product.name}</h1>
               <p className="text-lg md:text-xl font-light mb-6 md:mb-8">${product.price}</p>
               
               <p className="text-xs md:text-sm text-gray-400 leading-relaxed mb-8 md:mb-12 max-w-md">

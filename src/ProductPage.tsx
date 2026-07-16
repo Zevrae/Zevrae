@@ -91,7 +91,7 @@ export default function ProductPage() {
       <div className="min-h-screen bg-[#12100C] text-[#EAE6E1] flex items-center justify-center px-6">
         <div className="max-w-lg text-center space-y-6">
           <p className="text-[10px] uppercase tracking-[0.4em] text-[#C5A059]">Product not found</p>
-          <h1 className="text-3xl md:text-5xl font-serif tracking-[0.1em] uppercase">{params.id}</h1>
+          <h1 className="text-3xl md:text-5xl font-archivo font-bold tracking-[0.1em] uppercase">{params.id}</h1>
           <button
             onClick={() => navigate(-1)}
             className="inline-flex items-center gap-2 border border-[#EAE6E1]/20 px-5 py-3 text-[10px] uppercase tracking-[0.2em] text-[#EAE6E1]/70 hover:text-[#EAE6E1] hover:border-[#C5A059]/40 transition-colors"
@@ -157,7 +157,7 @@ export default function ProductPage() {
                   <ChevronLeft size={12} />
                   {product.label || 'Back'}
                 </button>
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-serif font-light tracking-[0.08em] uppercase leading-tight">
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-archivo font-bold tracking-[0.08em] uppercase leading-tight">
                   {product.name}
                 </h1>
                 <div className="flex items-center gap-4">
@@ -172,13 +172,13 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              <p className="max-w-xl text-[13px] md:text-[14px] font-serif leading-relaxed text-[#EAE6E1]/65 tracking-[0.02em]">
+              <p className="max-w-xl text-[13px] md:text-[14px] font-plex-mono leading-relaxed text-[#EAE6E1]/65 tracking-[0.02em]">
                 {productDescription}
               </p>
 
               <div className="max-w-xl">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/50">Size</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/50">Size</span>
                   <button className="text-[10px] uppercase tracking-[0.1em] text-[#EAE6E1]/40 hover:text-[#EAE6E1] underline underline-offset-4">
                     Size Guide
                   </button>
@@ -212,7 +212,7 @@ export default function ProductPage() {
               className="mt-[4vh] lg:mt-[18vh] max-w-xl"
             >
               <div className="border-t border-[#EAE6E1]/10 pt-8 space-y-4">
-                <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/45">
+                <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/45">
                   <span>Quantity</span>
                   <div className="flex items-center border border-[#EAE6E1]/15">
                     <button
@@ -231,7 +231,7 @@ export default function ProductPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 text-[11px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/55">
+                <div className="flex items-center justify-between pt-4 text-[11px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/55">
                   <span>Total</span>
                   <span className="text-lg font-mono text-[#EAE6E1]">
                     {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(product.price * quantity)}

@@ -27,7 +27,7 @@ export const Home: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="text-6xl md:text-8xl font-serif tracking-widest uppercase mb-6"
+            className="text-6xl md:text-8xl font-archivo font-bold tracking-widest uppercase mb-6"
           >
             Zevrae
           </motion.h1>
@@ -65,7 +65,7 @@ export const Home: React.FC = () => {
       <section className="py-32 px-6 max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">Women's Collection</h2>
+            <h2 className="text-3xl font-archivo font-bold tracking-widest uppercase mb-4">Women's Collection</h2>
             <p className="text-sm text-gray-500 tracking-wider">Curated pieces for the modern silhouette.</p>
           </div>
           <Link 
@@ -104,7 +104,7 @@ export const Home: React.FC = () => {
       <section className="py-32 px-6 max-w-7xl mx-auto border-t border-white/5">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-3xl font-serif tracking-widest uppercase mb-4">Men's Collection</h2>
+            <h2 className="text-3xl font-archivo font-bold tracking-widest uppercase mb-4">Men's Collection</h2>
             <p className="text-sm text-gray-500 tracking-wider">Refined tailoring and elevated essentials.</p>
           </div>
           <Link 

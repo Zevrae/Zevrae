@@ -1,3 +1,5 @@
+@reference "../index.css";
+
 /* ═══════════════════════════════════════════════════════════
    Collection Scroller — GSAP Horizontal Pinned
    ═══════════════════════════════════════════════════════════ */
@@ -32,7 +34,7 @@
 }
 
 .cs-header__eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
+  @apply font-plex-mono;
   font-size: 9px;
   letter-spacing: 0.5em;
   color: rgba(197, 160, 89, 0.4);
@@ -71,7 +73,7 @@
 }
 
 .cs-dot__label {
-  font-family: 'IBM Plex Mono', monospace;
+  @apply font-plex-mono;
   font-size: 8px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -162,7 +164,7 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  font-family: 'IBM Plex Mono', monospace;
+  @apply font-plex-mono;
   font-size: 9px;
   letter-spacing: 0.3em;
   color: rgba(197, 160, 89, 0.35);
@@ -232,7 +234,7 @@
 }
 
 .cs-card__label {
-  font-family: 'IBM Plex Mono', monospace;
+  @apply font-plex-mono;
   font-size: 9px;
   letter-spacing: 0.4em;
   text-transform: uppercase;
@@ -246,9 +248,8 @@
 }
 
 .cs-card__heading {
-  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  @apply font-archivo font-bold uppercase;
   font-size: 2.1rem;
-  font-weight: 300;
   letter-spacing: 0.04em;
   color: rgba(234, 230, 225, 0.9);
   line-height: 1.15;
@@ -256,7 +257,7 @@
 }
 
 .cs-card__sub {
-  font-family: 'IBM Plex Mono', monospace;
+  @apply font-sans;
   font-size: 10.5px;
   line-height: 1.8;
   color: rgba(234, 230, 225, 0.3);
@@ -286,7 +287,7 @@
   background: none;
   border: 1px solid rgba(234, 230, 225, 0.1);
   cursor: pointer;
-  font-family: 'IBM Plex Mono', monospace;
+  @apply font-plex-mono;
   font-size: 9px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -349,7 +350,7 @@
 }
 
 .cs-scroll-hint__text {
-  font-family: 'IBM Plex Mono', monospace;
+  @apply font-plex-mono;
   font-size: 8px;
   letter-spacing: 0.5em;
   color: rgba(234, 230, 225, 0.15);
