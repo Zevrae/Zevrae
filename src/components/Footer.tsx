@@ -6,7 +6,7 @@ export const Footer: React.FC = () => {
     <footer className="bg-[#050505] text-white py-20 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
         <div className="space-y-4">
-          <h3 className="text-2xl font-serif tracking-widest uppercase">Zevrae</h3>
+          <h3 className="text-2xl font-archivo font-bold tracking-[0.1em] uppercase" style={{ fontStretch: '125%' }}>Zevrae</h3>
           <p className="text-xs text-gray-400 leading-relaxed max-w-xs">
             Defining modern luxury through minimalist design and uncompromising quality.
           </p>

@@ -137,6 +137,10 @@ export function PageTransitionLoader() {
             duration: 0.75,
             ease: "power2.inOut",
             force3D: true,
+            onStart: () => {
+              // Signal hero to animate in if navigating to home
+              window.dispatchEvent(new CustomEvent("hero-reveal"));
+            },
           },
           0.45,
         );
@@ -219,7 +223,7 @@ export function PageTransitionLoader() {
                   fontWeight: 700,
                   fontStretch: "125%",
                   letterSpacing: "0.03em",
-                  color: "#0a0a0a",
+                  color: "#12100C",
                   lineHeight: 1,
                   textTransform: "uppercase",
                   willChange: "transform",
@@ -238,7 +242,7 @@ export function PageTransitionLoader() {
               fontFamily: "'Archivo', sans-serif",
               fontSize: "clamp(0.45rem, 1.2vw, 0.75rem)",
               fontWeight: 500,
-              color: "#0a0a0a",
+              color: "#12100C",
               letterSpacing: "0.05em",
               lineHeight: 1,
               opacity: 0.6,

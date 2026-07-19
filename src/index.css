@@ -1,14 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700;125,800&family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700;125,800&family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400&family=Inter+Tight:wght@900&display=swap');
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'Neue Haas Grotesk Text Pro';
+  src: url('./assets/Neue Haas Grotesk Text Pro Medium/Web Fonts/c27709ebd59dd06263af9ab951316c7d.woff2') format('woff2'),
+       url('./assets/Neue Haas Grotesk Text Pro Medium/Web Fonts/c27709ebd59dd06263af9ab951316c7d.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "Playfair Display", ui-serif, Georgia, serif;
   --font-archivo: "Archivo", sans-serif;
   --font-plex-mono: "IBM Plex Mono", monospace;
   
   --color-brand-red: #8B0000;
-  --color-brand-black: #0a0a0a;
+  --color-brand-black: #12100C;
   --color-brand-white: #f5f5f5;
 }
 
@@ -18,7 +27,7 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+    @apply font-archivo font-bold uppercase;
   }
 }
 
@@ -28,7 +37,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #12100C;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -48,4 +57,162 @@ body[data-loading="true"] {
 /* Tabular nums for counter */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════
+   HERO SECTION — OUTFIT-style typography layout
+   ═══════════════════════════════════════════════ */
+
+.hero-typography-wrapper {
+  padding: 10vh 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-brand-text {
+  @apply font-archivo;
+  font-weight: 800;
+  font-stretch: 125%;
+  font-size: clamp(5rem, 19vw, 22rem);
+  letter-spacing: -0.02em;
+  line-height: 0.85;
+  color: #C5A059;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.zv-hero-letter {
+  display: inline-block;
+}
+
+/* ® trademark symbol */
+.hero-trademark {
+  position: absolute;
+  right: 3vw;
+  bottom: calc(12vh + 2.2rem);
+  z-index: 5;
+}
+
+.hero-trademark span {
+  @apply font-archivo;
+  font-weight: 800;
+  font-size: clamp(1.4rem, 3.5vw, 3.8rem);
+  color: #C5A059;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(1.6rem, 4vw, 4.4rem);
+  height: clamp(1.6rem, 4vw, 4.4rem);
+  border: 2px solid #C5A059;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+/* Gold horizontal divider */
+.hero-divider {
+  padding: 0 1.5rem;
+  position: relative;
+}
+
+.hero-divider-line {
+  height: 2px;
+  background: #C5A059;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Info row below the divider */
+.hero-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 0;
+  opacity: 0;
+}
+
+.hero-info-label {
+  @apply font-plex-mono;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: rgba(234, 230, 225, 0.5);
+  font-weight: 500;
+}
+
+.hero-info-desc p {
+  @apply font-plex-mono;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: rgba(234, 230, 225, 0.5);
+  line-height: 1.7;
+  max-width: 420px;
+  margin: 0;
+}
+
+.hero-info-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.hero-info-link-item {
+  @apply font-plex-mono;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(234, 230, 225, 0.5);
+}
+
+.hero-info-link-item button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.4s ease;
+}
+
+.hero-info-link-item button:hover {
+  color: #C5A059;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero-typography-wrapper {
+    padding: 12vh 0.5rem 0;
+  }
+
+  .hero-brand-text {
+    font-size: clamp(3.2rem, 17vw, 8rem);
+  }
+
+  .hero-trademark {
+    right: 2vw;
+    bottom: calc(12vh + 1.4rem);
+  }
+
+  .hero-trademark span {
+    font-size: 1rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-width: 1.5px;
+  }
+
+  .hero-info-row {
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.2rem 1rem 0;
+  }
 }

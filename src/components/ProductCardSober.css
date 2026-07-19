@@ -1,0 +1,171 @@
+/* ═══════════════════════════════════════════════════════════
+   ProductCardSober — Minimal dark product card with
+   vertical-wipe hover reveal, zoom-in & saturation effect
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Card Container ── */
+.product-card-sober {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+/* ── Image Wrapper ── */
+.product-card-sober__image-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #111111;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+
+/* ── Front Image (always visible) ── */
+.product-card-sober__front {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* ── Back Image (revealed by wipe) ── */
+.product-card-sober__back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  /* clip-path, transform, filter are all set directly by JS */
+  clip-path: inset(0 100% 0 0);
+  transform: scale(1.35);
+  filter: saturate(8) brightness(1.6) contrast(1.4);
+  will-change: clip-path, transform, filter;
+  pointer-events: none;
+}
+
+/* ── Vertical Wipe Line ── */
+.product-card-sober__wipe-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  z-index: 3;
+  left: 0;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 20px 4px rgba(255, 255, 255, 0.25), 0 0 60px 8px rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── "Image Pending" Fallback ── */
+.product-card-sober__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(234, 230, 225, 0.15);
+}
+
+/* ── Product Info Section ── */
+.product-card-sober__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 2px;
+}
+
+.product-card-sober__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.product-card-sober__name {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: #EAE6E1;
+  text-transform: none;
+  line-height: 1.35;
+  padding-right: 16px;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.product-card-sober:hover .product-card-sober__name {
+  color: #ffffff;
+}
+
+.product-card-sober__price {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #EAE6E1;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.product-card-sober__original-price {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(234, 230, 225, 0.35);
+  text-decoration: line-through;
+  margin-top: 2px;
+  text-align: right;
+}
+
+/* ── Category Label (dot + text) ── */
+.product-card-sober__category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.product-card-sober__category-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #EAE6E1;
+  flex-shrink: 0;
+}
+
+.product-card-sober__category-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(234, 230, 225, 0.45);
+}
+
+/* ── Discount Badge (subtle, bottom-right of image) ── */
+.product-card-sober__discount {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 4;
+  background: rgba(197, 160, 89, 0.9);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.product-card-sober__discount-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+}

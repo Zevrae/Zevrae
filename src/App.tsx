@@ -1,15 +1,18 @@
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { CollectionScroller } from './components/CollectionScroller';
 import './components/CollectionScroller.css';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
+import gsap from 'gsap';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import LoginModal from './LoginModal';
 import ProductGrid from './ProductGrid';
 import CartDrawer from './CartDrawer';
 import CheckoutPage from './CheckoutPage';
+import BagPage from './BagPage';
 import Admin from './Admin';
 import ProductPage from './ProductPage';
+import ShinyText from './components';
 import { useCart } from './CartContext';
 import { useAuthModal } from './AuthModalContext';
 import { supabase } from './supabaseClient';
@@ -18,57 +21,10 @@ import { usePreloader } from './features/PreloaderContext';
 import { PageTransitionLoader } from './features/PageTransitionLoader';
 import { usePageTransition } from './features/PageTransitionContext';
 import { CustomCursor } from './features/CustomCursor';
+import heroImage from './assets/hero section.png';
+import ComingSoon from './pages/comingsoon/ComingSoon';
+import VerifyEmail from './pages/VerifyEmail';
 
-function CampaignSection() {
-  const editorialRef = useRef(null);
-  const { scrollYProgress: editorialScroll } = useScroll({ 
-    target: editorialRef,
-    offset: ["start end", "end start"]
-  });
-  // const editorialY = useTransform(editorialScroll, [0, 1], [50, -50]);
-
-  return (
-    <section id="campaign" ref={editorialRef} className="py-[160px] px-6 md:px-12 max-w-[1400px] mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32 items-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-          className="order-2 md:order-1 pr-0 md:pr-16"
-        >
-          <h2 className="text-[10px] uppercase tracking-[0.4em] font-serif text-[#EAE6E1]/50 mb-12">
-            CAMPAIGN
-          </h2>
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif font-light mb-12 leading-tight text-[#EAE6E1] tracking-[0.05em]">
-            Autumn / Winter 2026
-          </h3>
-          <p className="text-[#EAE6E1]/60 font-serif leading-relaxed text-[13px] md:text-[14px] max-w-md tracking-[0.02em]">
-            A study in architectural minimalism. The new collection explores the tension between structured tailoring and fluid drape, crafted from the finest European textiles. Each piece is designed with an uncompromising focus on form, function, and enduring elegance.
-          </p>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 2, ease: [0.25, 0.1, 0.25, 1] }}
-          className="order-1 md:order-2 relative"
-        >
-          <div className="aspect-[4/5] overflow-hidden bg-[#111111]" data-cursor-image>
-            <img 
-              src="https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=1974&auto=format&fit=crop" 
-              alt="Campaign" 
-              className="w-full h-full object-cover opacity-70 grayscale-[30%]"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-[#0a0a0a]/20 mix-blend-multiply" />
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
 export default function App() {
   const { isLoginModalOpen, setIsLoginModalOpen } = useAuthModal();
@@ -78,8 +34,9 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const { scrollY } = useScroll();
   const { setIsCartOpen, items } = useCart();
-  const { isLoading } = usePreloader();
-  const { trigger: navTransition } = usePageTransition();
+  const { isLoading, hasCompletedOnce } = usePreloader();
+  const { trigger: navTransition, isTransitioning } = usePageTransition();
+  const isTransitioningRef = useRef(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
@@ -94,9 +51,14 @@ export default function App() {
     return () => { document.body.style.overflow = ''; };
   }, [isLoading, location.pathname]);
   
-  // Parallax effects
-  const heroY = useTransform(scrollY, [0, 1000], [0, 300]);
-  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+  // Hero animation refs
+  const heroRef = useRef<HTMLDivElement>(null);
+  const heroAnimatedRef = useRef(false);
+
+  // Keep isTransitioningRef in sync so event handlers always read latest value
+  useEffect(() => {
+    isTransitioningRef.current = isTransitioning;
+  }, [isTransitioning]);
 
   useEffect(() => {
     const checkAdminStatus = async (u: any) => {
@@ -140,6 +102,87 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // ── Hero GSAP: hide letters immediately, animate when preloader reveals ──
+  const HERO_LETTERS = 'ZEVRAE'.split('');
+  const HERO_LETTER_ORDER = [3, 0, 5, 1, 4, 2];
+
+  const resetHero = () => {
+    if (!heroRef.current) return;
+    heroAnimatedRef.current = false;
+    const letters = heroRef.current.querySelectorAll<HTMLElement>('.zv-hero-letter');
+    const line = heroRef.current.querySelector<HTMLElement>('.hero-divider-line');
+    const infoRow = heroRef.current.querySelector<HTMLElement>('.hero-info-row');
+    letters.forEach((el) => gsap.set(el, { yPercent: 110 }));
+    if (line) gsap.set(line, { scaleX: 0, transformOrigin: 'left center' });
+    if (infoRow) gsap.set(infoRow, { opacity: 0, y: 20 });
+  };
+
+  const runHeroAnimation = () => {
+    if (heroAnimatedRef.current || !heroRef.current) return;
+    heroAnimatedRef.current = true;
+
+    const letters = heroRef.current.querySelectorAll<HTMLElement>('.zv-hero-letter');
+    const line = heroRef.current.querySelector<HTMLElement>('.hero-divider-line');
+    const infoRow = heroRef.current.querySelector<HTMLElement>('.hero-info-row');
+
+    if (!letters.length) return;
+
+    const tl = gsap.timeline();
+
+    // Letters slide up — power4.out gives a strong decel right before landing
+    // Last letter starts at 5*0.09=0.45s, finishes at 0.45+0.9 = 1.35s
+    HERO_LETTER_ORDER.forEach((letterIdx, seqIdx) => {
+      tl.to(
+        letters[letterIdx],
+        { yPercent: 0, duration: 0.9, ease: 'power4.out' },
+        `${seqIdx * 0.09}`,
+      );
+    });
+
+    // Line: starts at 0s, duration 1.25s → finishes at 1.25s (just before last letter at 1.35s)
+    if (line) {
+      tl.to(line, { scaleX: 1, duration: 1.25, ease: 'power2.inOut' }, 0);
+    }
+
+    // Info row fades up after letters land
+    if (infoRow) {
+      tl.to(infoRow, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 1.1);
+    }
+  };
+
+  // When navigating TO home: always reset elements to hidden.
+  // Only auto-play immediately if there's NO active page transition
+  // (browser back button, direct URL, HMR — all have no curtain covering the page).
+  // NavTransition (clicking ZEVRAE/HOME) uses hero-reveal event instead.
+  useEffect(() => {
+    if (!isHome) return;
+    resetHero();
+    if (hasCompletedOnce && !isTransitioningRef.current) {
+      setTimeout(runHeroAnimation, 50);
+    }
+  }, [location.pathname]);
+
+  // Preloader: fires at slide start → delay 500ms = 50% into the 1.0s slide
+  useEffect(() => {
+    const handle = () => {
+      if (!isHome) return;
+      setTimeout(runHeroAnimation, 500);
+    };
+    window.addEventListener('preloader-sliding', handle);
+    return () => window.removeEventListener('preloader-sliding', handle);
+  }, [isHome]);
+
+  // Page transition: fires when curtain lifts to reveal new page
+  useEffect(() => {
+    const handle = () => {
+      if (!isHome) return;
+      // Small delay to let the page content settle before animating
+      setTimeout(runHeroAnimation, 100);
+    };
+    window.addEventListener('hero-reveal', handle);
+    return () => window.removeEventListener('hero-reveal', handle);
+  }, [isHome]);
+
   // Luxury animation pacing
   const transition = { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] };
   const staggerTransition = { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] };
@@ -156,30 +199,14 @@ export default function App() {
   const displayName = getDisplayName();
 
 return (
-  <div data-page-content className="min-h-screen bg-[#0a0a0a] text-[#EAE6E1] selection:bg-[#C5A059]/30 selection:text-[#EAE6E1] relative overflow-x-hidden font-sans">
+  <div data-page-content className="min-h-screen bg-[#12100C] text-[#EAE6E1] selection:bg-[#C5A059]/30 selection:text-[#EAE6E1] relative overflow-x-hidden font-sans">
     {/* Premium custom cursor — hidden on touch devices */}
     <CustomCursor />
-    {/* Preloader Overlay — skip on admin */}
-    {isLoading && !location.pathname.startsWith('/admin') && <Preloader />}
+    {/* Preloader Overlay — self-manages slide-up exit, never re-renders after completion */}
+    {!hasCompletedOnce && !location.pathname.startsWith('/admin') && <Preloader />}
     {/* Page Transition Loader */}
     <PageTransitionLoader />
-    {isHome && (
-      <>
-        {/* HERO BACKGROUND VIDEO */}
-        <div className="relative w-full h-screen overflow-hidden">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src="/packaging.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
-      </>
-    )}
+
       {/* Global Film Grain */}
       <div 
         className="fixed inset-0 opacity-[0.015] pointer-events-none z-50 mix-blend-difference"
@@ -190,25 +217,21 @@ return (
       {!location.pathname.startsWith('/admin') && (
       <nav 
         className={`fixed top-0 w-full z-40 transition-all duration-1000 ${
-          isScrolled ? 'bg-[#0a0a0a]/95 backdrop-blur-md py-6 border-b border-[#C5A059]/10' : 'bg-transparent py-10'
+          isScrolled ? 'bg-[#12100C]/95 backdrop-blur-md py-6 border-b border-[#C5A059]/10' : 'bg-transparent py-10'
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
           <div className="hidden md:flex space-x-16 text-[10px] uppercase tracking-[0.3em] font-plex-mono text-[#EAE6E1]/70">
-            <button onClick={() => navTransition(() => { navigate('/'); })} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
-              HOME
-              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
-            </button>
             <button onClick={() => navTransition(() => navigate('/men'))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
-              MEN
-              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
-            </button>
-            <button onClick={() => navTransition(() => navigate('/women'))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
-              WOMEN
+              CLOTHING
               <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
             </button>
             <button onClick={() => navTransition(() => navigate('/jewellery'))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
               JEWELLERY
+              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
+            </button>
+            <button onClick={() => navTransition(() => navigate('/accessories'))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
+              ACCESSORIES
               <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
             </button>
           </div>
@@ -237,13 +260,29 @@ return (
                 <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
               </button>
             ) : (
-              <button onClick={() => navTransition(() => setIsLoginModalOpen(true))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
-                LOGIN
-                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="group relative overflow-hidden pb-1 font-plex-mono transition-colors duration-700 hover:text-[#EAE6E1]"
+                  onClick={() => {}}
+                >
+                  <ShinyText
+                    text="AI WARDROBE"
+                    speed={2.2}
+                    className="text-[10px] uppercase tracking-[0.3em] font-plex-mono"
+                    color="#C5A059"
+                    shineColor="#FFFFFF"
+                  />
+                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
+                </button>
+                <button onClick={() => navTransition(() => setIsLoginModalOpen(true))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
+                  LOGIN
+                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
+                </button>
+              </>
             )}
-            <button onClick={() => navTransition(() => setIsCartOpen(true))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
-              CART {items.length > 0 && `(${items.length})`}
+            <button onClick={() => navTransition(() => navigate('/bag'))} className="group relative overflow-hidden pb-1 hover:text-[#EAE6E1] transition-colors duration-700">
+              BAG({items.reduce((total, item) => total + item.quantity, 0)})
               <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/40 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
             </button>
           </div>
@@ -266,7 +305,7 @@ return (
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-[#0a0a0a] z-50 flex flex-col items-center justify-center space-y-12"
+            className="fixed inset-0 bg-[#12100C] z-50 flex flex-col items-center justify-center space-y-12"
           >
             <button 
               onClick={() => setIsMenuOpen(false)}
@@ -285,7 +324,7 @@ return (
               user 
                 ? { name: `${displayName} | Logout`, href: '#', onClick: () => { supabase.auth.signOut(); setIsMenuOpen(false); } }
                 : { name: 'Login', href: '#', onClick: () => { navTransition(() => setIsLoginModalOpen(true)); setIsMenuOpen(false); } },
-              { name: `Cart (${items.length})`, href: '#', onClick: () => { navTransition(() => setIsCartOpen(true)); setIsMenuOpen(false); } }
+              { name: `Cart (${items.length})`, href: '#', onClick: () => { navTransition(() => navigate('/bag')); setIsMenuOpen(false); } }
             ].map((item, i) => (
               <motion.a
                 key={item.name}
@@ -310,59 +349,87 @@ return (
         )}
       </AnimatePresence>
 
-      {/* Hero Section */}
+      {/* Hero Section — centered layout with ZEVRAE animations */}
       {isHome && (
         <>
-          <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
-            <div className="relative z-20 text-center px-4 w-full flex flex-col items-center mt-12">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-                className="mb-12"
-              >
-                <p className="text-[10px] md:text-[11px] uppercase tracking-[0.5em] font-plex-mono text-[#EAE6E1]/60">
-                  AUTUMN / WINTER 2026
-                </p>
-              </motion.div>
+          <section
+            ref={heroRef}
+            className="relative bg-[#12100C] overflow-hidden min-h-screen flex flex-col items-center justify-center"
+          >
+            {/* ── PHOTO PLACEHOLDER — replace src with <video> when ready ── */}
+            <img
+              src={heroImage}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: 'brightness(0.45) saturate(1.1)' }}
+            />
+            {/* Warm amber vignette to enhance yellow-black feel */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(197,160,89,0.08) 0%, rgba(10,10,10,0.75) 70%)' }}
+            />
 
-              <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                className="font-archivo font-bold tracking-[0.1em] leading-none text-[#EAE6E1] relative z-10 py-4"
-                style={{ fontSize: 'clamp(3rem, 7vw, 7rem)', fontStretch: '125%' }}
+            {/* All hero text — sits above background layers */}
+            <div className="relative z-10 flex flex-col items-center">
+
+            {/* Season label */}
+            <p className="text-[10px] uppercase tracking-[0.4em] text-[#EAE6E1]/60 font-plex-mono mb-8">
+              AUTUMN / WINTER 2026
+            </p>
+
+            {/* ZEVRAE block: text + white line (line = same width as text) */}
+            <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch' }}>
+
+              {/* Giant ZEVRAE — letters slide up via GSAP */}
+              <h1
+                className="font-archivo font-extrabold uppercase text-[#EAE6E1] text-center"
+                style={{
+                  fontSize: 'clamp(3rem, 14vw, 18rem)',
+                  fontStretch: '125%',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 0.88,
+                  margin: 0,
+                }}
+                aria-label="ZEVRAE"
               >
-                ZEVRAE
-              </motion.h1>
+                {HERO_LETTERS.map((letter, i) => (
+                  <span key={`hero-${letter}-${i}`} className="inline-block overflow-hidden" style={{ lineHeight: 1 }}>
+                    <span
+                      className="zv-hero-letter inline-block"
+                      style={{ willChange: 'transform' }}
+                    >
+                      {letter}
+                    </span>
+                  </span>
+                ))}
+              </h1>
+
+              {/* White line — draws left→right, same width as ZEVRAE text */}
+              <div
+                className="hero-divider-line"
+                style={{
+                  height: '1.5px',
+                  background: '#EAE6E1',
+                  width: '100%',
+                  marginTop: '0.6rem',
+                }}
+              />
+
+              {/* Tagline — centered inside text width */}
+              <p
+                className="font-sans italic text-[#EAE6E1]/60 text-center"
+                style={{ fontSize: '0.9rem', marginTop: '1.4rem', letterSpacing: '0.01em' }}
+              >
+                Luxury is a Matter of Choice
+              </p>
+
+              {/* Bottom row: links left + gold dot right */}
               
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2, delay: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-                className="mt-8"
-              >
-                <p className="text-[11px] md:text-[13px] font-sans italic text-[#EAE6E1]/50 tracking-[0.05em]">
-                  The Architecture of Elegance
-                </p>
-              </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-                className="mt-20 flex space-x-16 text-[10px] uppercase tracking-[0.3em] font-plex-mono text-[#EAE6E1]/70"
-              >
-                <a href="#collection" className="hover:text-[#EAE6E1] transition-colors duration-500 relative group pb-1">
-                  View Collection
-                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/30 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
-                </a>
-                <a href="#lookbook" className="hover:text-[#EAE6E1] transition-colors duration-500 relative group pb-1">
-                  Lookbook
-                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#C5A059]/30 transform origin-left scale-x-0 transition-transform duration-700 ease-out group-hover:scale-x-100" />
-                </a>
-              </motion.div>
             </div>
+
+            </div>{/* end z-10 wrapper */}
           </section>
 
           {/* Collection Scroller */}
@@ -381,11 +448,13 @@ return (
         <Route path="/jewellery" element={<ProductGrid categoryFilter="jewellery" />} />
         <Route path="/jewellery/rings" element={<ProductGrid categoryFilter="rings" />} />
         <Route path="/jewellery/pendants" element={<ProductGrid categoryFilter="pendants" />} />
-        <Route path="/jewellery/keychain" element={<ProductGrid categoryFilter="keychain" />} />
         <Route path="/jewellery/bracelet" element={<ProductGrid categoryFilter="bracelet" />} />
-        <Route path="/jewellery/toys" element={<ProductGrid categoryFilter="toys" />} />
         <Route path="/jewellery/earrings" element={<ProductGrid categoryFilter="earrings" />} />
+        <Route path="/accessories" element={<ProductGrid categoryFilter="accessories" />} />
+        <Route path="/accessories/keychain" element={<ProductGrid categoryFilter="keychain" />} />
+        <Route path="/accessories/toys" element={<ComingSoon />} />
         <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/bag" element={<BagPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/orders" element={<Admin />} />
@@ -393,68 +462,48 @@ return (
         <Route path="/admin/collections" element={<Admin />} />
         <Route path="/admin/categories" element={<Admin />} />
         <Route path="/admin/discounts" element={<Admin />} />
+        <Route path="/verify-email/:token" element={<VerifyEmail />} />
+        
       </Routes>
 
-      {isHome && (
-        <>
-          <CampaignSection />
-
-          {/* Global Presence Section */}
-          <section className="py-[160px] bg-[#0a0a0a]">
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-                className="flex flex-row flex-wrap justify-center items-center gap-16 md:gap-32 text-[10px] uppercase tracking-[0.4em] font-serif text-[#EAE6E1]/50"
-              >
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">PARIS</span>
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">MILAN</span>
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">TOKYO</span>
-                <span className="hover:text-[#EAE6E1] transition-colors duration-700 cursor-default">NEW YORK</span>
-              </motion.div>
-            </div>
-          </section>
-        </>
-      )}
 
       {/* Footer */}
-      <footer className="bg-[#0a0a0a] pt-[160px] pb-16 px-6 md:px-12 border-t border-[#C5A059]/10">
+      {!location.pathname.startsWith('/admin') && (
+      <footer className="bg-[#12100C] pt-[160px] pb-16 px-6 md:px-12 border-t border-[#C5A059]/10 font-plex-mono">
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8 mb-32">
             <div className="col-span-1 md:col-span-4">
-              <h2 className="text-xl font-serif font-light tracking-[0.3em] mb-12 text-[#EAE6E1]">ZEVRAE</h2>
+              <h2 className="text-xl md:text-3xl font-archivo font-bold tracking-[0.1em] mb-12 text-[#EAE6E1]" style={{ fontStretch: '125%' }}>ZEVRAE</h2>
               <div className="mt-8 flex border-b border-[#EAE6E1]/20 pb-3 max-w-xs group focus-within:border-[#C5A059]/40 transition-colors duration-700">
                 <input 
                   type="email" 
                   placeholder="Newsletter" 
-                  className="bg-transparent border-none outline-none w-full text-[11px] font-serif placeholder:text-[#EAE6E1]/30 text-[#EAE6E1] tracking-[0.1em]"
+                  className="bg-transparent border-none outline-none w-full text-[11px] placeholder:text-[#EAE6E1]/30 text-[#EAE6E1] tracking-[0.1em]"
                 />
-                <button className="text-[9px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/50 hover:text-[#EAE6E1] transition-colors duration-500">
+                <button className="text-[9px] uppercase tracking-[0.2em] text-[#EAE6E1]/50 hover:text-[#EAE6E1] transition-colors duration-500">
                   Subscribe
                 </button>
               </div>
             </div>
             
             <div className="col-span-1 md:col-span-2 md:col-start-7">
-              <ul className="space-y-6 text-[11px] font-serif text-[#EAE6E1]/60 tracking-[0.05em]">
-                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">Customer Care</a></li>
-                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">Shipping</a></li>
-                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">Returns</a></li>
-                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">Size Guide</a></li>
+              <ul className="space-y-6 text-[11px] text-[#EAE6E1]/60 tracking-[0.05em]">
+                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">CUSTOMER CARE</a></li>
+                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">SHIPPING</a></li>
+                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">RETURNS</a></li>
+                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">SIZE GUIDE</a></li>
               </ul>
             </div>
 
             <div className="col-span-1 md:col-span-2">
-              <ul className="space-y-6 text-[11px] font-serif text-[#EAE6E1]/60 tracking-[0.05em]">
-                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">Legal</a></li>
-                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">Privacy</a></li>
+              <ul className="space-y-6 text-[11px] text-[#EAE6E1]/60 tracking-[0.05em]">
+                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">LEGAL</a></li>
+                <li><a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">PRIVACY</a></li>
               </ul>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-[#EAE6E1]/10 text-[10px] font-serif text-[#EAE6E1]/40 tracking-[0.1em]">
+          <div className="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-[#EAE6E1]/10 text-[10px] text-[#EAE6E1]/40 tracking-[0.1em]">
             <p>&copy; {new Date().getFullYear()} ZEVRAE.</p>
             <div className="flex space-x-12 mt-8 md:mt-0">
               <a href="#" className="hover:text-[#EAE6E1] transition-colors duration-500">Instagram</a>
@@ -463,6 +512,7 @@ return (
           </div>
         </div>
       </footer>
+      )}
 
       <CartDrawer />
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />

@@ -91,7 +91,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative w-full h-[100dvh] md:h-auto max-w-5xl bg-[#0a0a0a] md:border border-[#C5A059]/10 rounded-none md:rounded-sm overflow-hidden flex flex-col md:flex-row max-h-[100dvh] md:max-h-[90vh]"
+          className="relative w-full h-[100dvh] md:h-auto max-w-5xl bg-[#12100C] md:border border-[#C5A059]/10 rounded-none md:rounded-sm overflow-hidden flex flex-col md:flex-row max-h-[100dvh] md:max-h-[90vh]"
         >
           <button 
             onClick={onClose}
@@ -110,14 +110,14 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-[#EAE6E1]/20 font-serif tracking-widest uppercase text-sm">
+                <div className="w-full h-full flex items-center justify-center text-[#EAE6E1]/20 font-sans tracking-widest uppercase text-sm">
                   Image Unavailable
                 </div>
               )}
             </div>
             
             {/* Thumbnails */}
-            <div className="flex p-4 gap-4 bg-[#0a0a0a] border-b md:border-t border-[#C5A059]/10 overflow-x-auto scrollbar-hide">
+            <div className="flex p-4 gap-4 bg-[#12100C] border-b md:border-t border-[#C5A059]/10 overflow-x-auto scrollbar-hide">
               <button 
                 onClick={() => setActiveImage('front')}
                 className={`relative w-20 min-w-[5rem] aspect-[3/4] shrink-0 rounded-sm overflow-hidden border-2 transition-colors ${activeImage === 'front' ? 'border-[#C5A059]' : 'border-transparent hover:border-[#EAE6E1]/30'}`}
@@ -150,10 +150,10 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
           {/* Product Details */}
           <div className="w-full md:w-1/2 p-5 sm:p-6 md:p-12 flex flex-col overflow-y-auto pb-[90px] md:pb-12">
             <div className="mb-4 md:mb-8">
-              <span className="text-[10px] uppercase tracking-[0.3em] font-serif text-[#C5A059] mb-1 sm:mb-2 block">
+              <span className="text-[10px] uppercase tracking-[0.3em] font-plex-mono text-[#C5A059] mb-1 sm:mb-2 block">
                 {product.label}
               </span>
-              <h2 className="text-xl sm:text-2xl md:text-4xl font-serif font-light tracking-[0.1em] text-[#EAE6E1] uppercase leading-tight mb-1 sm:mb-4">
+              <h2 className="text-xl sm:text-2xl md:text-4xl font-archivo font-bold tracking-[0.1em] text-[#EAE6E1] uppercase leading-tight mb-1 sm:mb-4">
                 {product.name}
               </h2>
               <p className="text-lg sm:text-xl font-mono text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(product.price)}</p>
@@ -162,7 +162,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             {/* Size Selector */}
             <div className="mb-5 md:mb-8 mt-2 md:mt-0">
               <div className="flex justify-between items-center mb-3 sm:mb-4">
-                <span className="text-[11px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70">Size</span>
+                <span className="text-[11px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70">Size</span>
                 <button className="text-[10px] uppercase tracking-[0.1em] text-[#EAE6E1]/40 hover:text-[#EAE6E1] underline underline-offset-4">Size Guide</button>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -174,7 +174,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     onClick={() => setSelectedSize(size)}
                     className={`transition-all duration-300 border ${
                       isLongSize 
-                        ? 'flex items-center justify-center text-center px-4 tracking-[0.5px] rounded box-border overflow-hidden whitespace-nowrap w-[130px] md:w-[140px] h-[48px] md:h-[52px] text-[16px] md:text-[18px] align-middle font-serif font-light' 
+                        ? 'flex items-center justify-center text-center px-4 tracking-[0.5px] rounded box-border overflow-hidden whitespace-nowrap w-[130px] md:w-[140px] h-[48px] md:h-[52px] text-[16px] md:text-[18px] align-middle font-sans font-light' 
                         : 'py-2 px-3 sm:py-3 sm:px-4 text-[12px] font-mono min-w-[3rem]'
                     } ${
                       selectedSize === size 
@@ -194,7 +194,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             {/* Quantity Selector */}
             <div className="mb-6 md:mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <span className="text-[11px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-2 sm:mb-4 block">Quantity</span>
+                <span className="text-[11px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-2 sm:mb-4 block">Quantity</span>
                 <div className="flex items-center border border-[#EAE6E1]/20 w-fit">
                   <button 
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -215,7 +215,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               {/* Total Price (Mobile) / Desktop */}
               <div className="mt-4 sm:mt-0 pt-4 sm:pt-0 sm:ml-auto">
                 <div className="hidden md:flex flex-col items-end">
-                   <span className="text-[11px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70 mb-4 block">Total</span>
+                   <span className="text-[11px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70 mb-4 block">Total</span>
                    <span className="text-xl font-mono text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(product.price * quantity)}</span>
                 </div>
               </div>
@@ -223,21 +223,21 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
             {/* Total Price (Desktop fallback) */}
             <div className="md:hidden flex justify-between items-center mb-6 py-4 border-t border-b border-[#EAE6E1]/10">
-              <span className="text-[12px] uppercase tracking-[0.2em] font-serif text-[#EAE6E1]/70">Total</span>
+              <span className="text-[12px] uppercase tracking-[0.2em] font-plex-mono text-[#EAE6E1]/70">Total</span>
               <span className="text-xl font-mono text-[#EAE6E1]">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(product.price * quantity)}</span>
             </div>
 
             {/* Actions Desktop */}
             <div className="hidden md:flex flex-col gap-4 mt-auto">
               {!selectedSize && (
-                <p className="text-red-400 text-xs font-serif tracking-widest text-center">Please select a size</p>
+                <p className="text-red-400 text-xs font-plex-mono tracking-widest text-center">Please select a size</p>
               )}
               <button 
                 onClick={handleAddToCart}
                 disabled={!selectedSize}
                 className={`w-full py-4 flex items-center justify-center space-x-3 uppercase tracking-[0.2em] font-bold text-[11px] transition-all duration-300 ${
                   selectedSize 
-                    ? 'bg-[#EAE6E1] text-[#0a0a0a] hover:bg-[#C5A059]' 
+                    ? 'bg-[#EAE6E1] text-[#12100C] hover:bg-[#C5A059]' 
                     : 'bg-[#EAE6E1]/10 text-[#EAE6E1]/30 cursor-not-allowed'
                 }`}
               >
@@ -249,7 +249,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                 disabled={!selectedSize}
                 className={`w-full py-4 uppercase tracking-[0.2em] font-bold text-[11px] transition-all duration-300 border ${
                   selectedSize 
-                    ? 'border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-[#0a0a0a]' 
+                    ? 'border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-[#12100C]' 
                     : 'border-[#EAE6E1]/10 text-[#EAE6E1]/30 cursor-not-allowed'
                 }`}
               >
@@ -259,13 +259,13 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
           </div>
           
           {/* Actions Mobile Sticky */}
-          <div className="md:hidden absolute bottom-0 left-0 right-0 bg-[#0a0a0a] border-t border-[#C5A059]/20 p-4 flex gap-3 z-50 shadow-[0_-10px_20px_rgba(0,0,0,0.8)]">
+          <div className="md:hidden absolute bottom-0 left-0 right-0 bg-[#12100C] border-t border-[#C5A059]/20 p-4 flex gap-3 z-50 shadow-[0_-10px_20px_rgba(0,0,0,0.8)]">
             <button 
               onClick={handleAddToCart}
               disabled={!selectedSize}
               className={`flex-1 py-3 px-2 flex items-center justify-center space-x-2 uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold text-[10px] sm:text-[11px] transition-all duration-300 ${
                 selectedSize 
-                  ? 'bg-[#EAE6E1] text-[#0a0a0a] hover:bg-[#C5A059]' 
+                  ? 'bg-[#EAE6E1] text-[#12100C] hover:bg-[#C5A059]' 
                   : 'bg-[#EAE6E1]/10 text-[#EAE6E1]/30 cursor-not-allowed'
               }`}
             >

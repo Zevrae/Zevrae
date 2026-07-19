@@ -23,7 +23,7 @@ export const Catalog: React.FC<CatalogProps> = ({ category }) => {
           transition={{ duration: 0.8 }}
           className="mb-16 text-center"
         >
-          <h1 className="text-4xl md:text-5xl font-serif tracking-widest uppercase mb-4">
+          <h1 className="text-4xl md:text-5xl font-archivo font-bold tracking-widest uppercase mb-4">
             {category}'s Collection
           </h1>
           <p className="text-sm text-gray-500 tracking-wider">

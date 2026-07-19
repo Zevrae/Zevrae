@@ -11,7 +11,7 @@ export const Navbar: React.FC = () => {
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isHome ? 'bg-transparent text-white' : 'bg-[#0a0a0a] text-white border-b border-white/10'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isHome ? 'bg-transparent text-white' : 'bg-[#12100C] text-white border-b border-white/10'}`}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <button className="lg:hidden">
@@ -23,14 +23,11 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        <Link to="/" className="text-2xl font-serif tracking-widest uppercase absolute left-1/2 -translate-x-1/2">
+        <Link to="/" className="text-2xl font-archivo font-bold tracking-widest uppercase absolute left-1/2 -translate-x-1/2">
           Zevrae
         </Link>
 
         <div className="flex items-center gap-6">
-          <button className="hover:text-gray-400 transition-colors">
-            <Search className="w-5 h-5" />
-          </button>
           <button 
             className="hover:text-gray-400 transition-colors relative"
             onClick={() => setIsCartOpen(true)}
