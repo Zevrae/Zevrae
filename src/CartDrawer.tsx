@@ -8,8 +8,8 @@ import { useAuth } from './hooks/UseAuth';
 export default function CartDrawer() {
   const { items, removeFromCart, isCartOpen, setIsCartOpen, cartTotal } = useCart();
   const { setIsLoginModalOpen } = useAuthModal();
-  const { token } = useAuth();
   const navigate = useNavigate();
+  const { token } = useAuth();
 
   const handleCheckoutClick = () => {
     setIsCartOpen(false);
