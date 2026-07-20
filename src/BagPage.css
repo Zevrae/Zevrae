@@ -119,6 +119,32 @@
   color: #F2ECE6;
 }
 
+/* ── Text reveal masks (item text, subtotal, checkout) ── */
+.mask-reveal {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+.mask-reveal-block {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.mask-reveal-inner {
+  display: inline-block;
+  will-change: transform;
+  transform: translateY(110%);
+}
+
+.mask-reveal-block .mask-reveal-inner {
+  display: block;
+}
+
 /* ── Item list ── */
 .bag-items {
   list-style: none;
@@ -136,6 +162,9 @@
   align-items: center;
   gap: 0 clamp(2rem, 4vw, 5rem);
   padding: clamp(2rem, 4vw, 3.5rem) 0;
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: opacity, transform;
 }
 
 .bag-item-info {

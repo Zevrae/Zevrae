@@ -18,6 +18,8 @@ export default function BagPage() {
   const navigate = useNavigate();
   const headerRef = useRef<HTMLElement>(null);
   const dividerRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLUListElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
   // Page fade-up entrance — short delay so React has painted the frame
@@ -66,6 +68,64 @@ export default function BagPage() {
 
     return () => { tl.kill(); };
   }, [mounted]);
+
+  // Cascading reveal for item text, subtotal, and checkout CTA — starts right as
+  // the heading letters finish sliding in, then runs top → bottom down the page.
+  // Deliberately mirrors the heading effect above (same [mounted] dep, no extra
+  // guard ref) — a hasAnimated-style guard here breaks under StrictMode's
+  // mount→cleanup→mount dev cycle: the first pass sets the guard true and then
+  // gets killed before its delay elapses, so the second (surviving) pass sees
+  // the guard already flipped and bails, and the animation never actually plays.
+  useEffect(() => {
+    if (!mounted) return;
+    if (!itemsRef.current && !footerRef.current) return;
+
+    const rows = itemsRef.current
+      ? Array.from(itemsRef.current.querySelectorAll<HTMLElement>('.bag-item'))
+      : [];
+    const footerMasks = footerRef.current
+      ? Array.from(footerRef.current.querySelectorAll<HTMLElement>('.mask-reveal-inner'))
+      : [];
+
+    if (!rows.length && !footerMasks.length) return;
+
+    // Heading timeline runs delay(0.15) + last letter start(0.54) + duration(0.9) ≈ 1.6s
+    const tl = gsap.timeline({ delay: 1.5 });
+
+    rows.forEach((row, i) => {
+      const masks = row.querySelectorAll<HTMLElement>('.mask-reveal-inner');
+      gsap.set(masks, { yPercent: 110 });
+
+      const rowStart = i * 0.12;
+
+      // Row itself fades + rises slightly
+      tl.to(
+        row,
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+        rowStart,
+      );
+      // Its text masks slide up right on top of that, same stagger feel as heading
+      tl.to(
+        masks,
+        { yPercent: 0, duration: 0.8, ease: 'power4.out', stagger: 0.05 },
+        rowStart + 0.05,
+      );
+    });
+
+    if (footerMasks.length) {
+      gsap.set(footerMasks, { yPercent: 110 });
+      const footerStart = rows.length * 0.12 + 0.15;
+      tl.to(
+        footerMasks,
+        { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.08 },
+        footerStart,
+      );
+    }
+
+    return () => { tl.kill(); };
+  }, [mounted]); // intentionally NOT depending on items.length — that would replay the
+  // whole cascade every time someone adds/removes an item, which fights the
+  // "load only" behavior we want
 
   const handleCheckout = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -123,16 +183,22 @@ export default function BagPage() {
       ) : (
         <>
           {/* ── Item List ── */}
-          <ul className="bag-items">
+          <ul className="bag-items" ref={itemsRef}>
             {items.map((item) => (
               <li key={`${item.id}-${item.size}`} className="bag-item">
                 {/* Left — Name + Price */}
                 <div className="bag-item-info">
-                  <span className="bag-item-name">{item.name}</span>
+                  <span className="bag-item-name mask-reveal-block">
+                    <span className="mask-reveal-inner">{item.name}</span>
+                  </span>
                   {item.size && item.size !== 'One Size' && (
-                    <span className="bag-item-size">{item.size}</span>
+                    <span className="bag-item-size mask-reveal">
+                      <span className="mask-reveal-inner">{item.size}</span>
+                    </span>
                   )}
-                  <span className="bag-item-price">{formatPrice(item.price)}</span>
+                  <span className="bag-item-price mask-reveal">
+                    <span className="mask-reveal-inner">{formatPrice(item.price)}</span>
+                  </span>
                 </div>
 
                 {/* Center — Product image */}
@@ -184,11 +250,15 @@ export default function BagPage() {
           </ul>
 
           {/* ── Checkout Section ── */}
-          <div className="bag-footer">
+          <div className="bag-footer" ref={footerRef}>
             {/* Left — Subtotal */}
             <div className="bag-subtotal">
-              <span className="bag-subtotal-label">Subtotal</span>
-              <span className="bag-subtotal-amount">{formatPrice(cartTotal)}</span>
+              <span className="bag-subtotal-label mask-reveal">
+                <span className="mask-reveal-inner">Subtotal</span>
+              </span>
+              <span className="bag-subtotal-amount mask-reveal-block">
+                <span className="mask-reveal-inner">{formatPrice(cartTotal)}</span>
+              </span>
               <p className="bag-subtotal-note">
                 Taxes and shipping will be calculated at checkout.
               </p>
@@ -200,7 +270,9 @@ export default function BagPage() {
               onClick={handleCheckout}
               aria-label="Proceed to checkout"
             >
-              CHECKOUT&nbsp;<span className="bag-checkout-arrow">↗</span>
+              <span className="mask-reveal-block">
+                <span className="mask-reveal-inner">CHECKOUT&nbsp;<span className="bag-checkout-arrow">↗</span></span>
+              </span>
             </button>
           </div>
         </>
