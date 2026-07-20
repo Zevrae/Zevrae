@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCart } from './CartContext';
 import { useAuthModal } from './AuthModalContext';
-import { supabase } from './supabaseClient';
+import { useAuth } from './hooks/UseAuth';
+import { cartApi } from './api/cart';
+import { ordersApi } from './api/orders';
+import { paymentsApi } from './api/payments';
 import { ChevronLeft, ShieldCheck, Lock, Truck, CreditCard, Wallet, ArrowRight, CheckCircle2, Smartphone } from 'lucide-react';
 
 const loadScript = (src: string) => {
@@ -19,33 +22,18 @@ const loadScript = (src: string) => {
 export default function CheckoutPage() {
   const { items, cartTotal, clearCart } = useCart();
   const { setIsLoginModalOpen } = useAuthModal();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState<2 | 3 | 4>(2);
   const [selectedMethod, setSelectedMethod] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        setIsLoginModalOpen(true);
-        navigate('/');
-      } else {
-        setUser(session.user);
-      }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        setIsLoginModalOpen(true);
-        navigate('/');
-      } else {
-        setUser(session.user);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate, setIsLoginModalOpen]);
+    if (!user) {
+      setIsLoginModalOpen(true);
+      navigate('/');
+    }
+  }, [user, navigate, setIsLoginModalOpen]);
 
   const [shippingData, setShippingData] = useState({
     firstName: '',
@@ -99,67 +87,81 @@ export default function CheckoutPage() {
   const shipping = subtotal > 1000 ? 0 : 99; // Standard 99 INR shipping, free over 1000
   const total = subtotal + shipping;
 
+  const buildShippingAddress = () => ({
+    line1: shippingData.address,
+    city: shippingData.city,
+    postal_code: shippingData.postalCode,
+    country: 'India',
+  });
+
+  // The backend's POST /orders reads from the user's server-side cart, not
+  // from the request body, so the client-side cart has to be pushed up
+  // before checkout can create an order.
+  const syncCartToBackend = async () => {
+    await cartApi.clearCart();
+    for (const item of items) {
+      await cartApi.addItem(item.id, item.size, item.quantity);
+    }
+  };
+
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedMethod) return;
 
     setIsProcessing(true);
 
+    try {
+      await syncCartToBackend();
+    } catch (err: any) {
+      alert('Failed to prepare your cart: ' + (err?.response?.data?.message || err.message));
+      setIsProcessing(false);
+      return;
+    }
+
     if (selectedMethod === 'RAZORPAY') {
-      const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-      if (!res) {
+      const scriptLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+      if (!scriptLoaded) {
         alert("Razorpay SDK failed to load. Are you online?");
         setIsProcessing(false);
         return;
       }
 
       try {
-        const orderData = await fetch('/.netlify/functions/create-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount: total, customer: shippingData, products: items })
-        }).then(r => r.json());
+        // Order (and its Razorpay counterpart) is created server-side, from
+        // the cart we just synced — the client never dictates the amount.
+        const orderRes = await ordersApi.create({
+          shipping_address: buildShippingAddress(),
+          payment_method: 'online',
+        });
 
-        if (orderData.error) throw new Error(orderData.error);
+        if (!orderRes.payment) {
+          throw new Error(orderRes.message || 'Payment gateway is not configured on the server.');
+        }
 
         const options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_placeholder",
-          amount: orderData.amount,
-          currency: orderData.currency,
+          key: orderRes.payment.key_id,
+          amount: orderRes.payment.amount,
+          currency: orderRes.payment.currency,
           name: "ZEVRAE",
           description: "Luxury Apparel Checkout",
-          order_id: orderData.orderId,
+          order_id: orderRes.payment.order_id,
           handler: async function (response: any) {
             try {
-              // Insert into Supabase Orders table directly
-              const payload = {
-                order_id: orderData.orderId,
-                customer_name: `${shippingData.firstName} ${shippingData.lastName}`.trim(),
-                customer_email: shippingData.email,
-                customer_address: `${shippingData.address}, ${shippingData.city}, ${shippingData.postalCode}`,
-                customer_phone: shippingData.phone || 'N/A',
-                amount: Number(total),
-                products: JSON.stringify(items),
-                payment_method: 'RAZORPAY',
-                status: 'paid'
-              };
+              // Signature is verified server-side — the client can never
+              // mark an order as paid on its own.
+              await paymentsApi.verify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              });
 
-              const { error } = await supabase.from('orders').insert([payload]);
-              
-              if (error) {
-                console.error("Razorpay Insert Error (Full):", error);
-                alert("Order failed: " + error.message);
-                setIsProcessing(false);
-                return;
-              }
-              
               clearCart();
               setStep(4);
               setTimeout(() => {
                 navigate("/");
               }, 2000);
             } catch (err: any) {
-              alert("Unexpected error");
+              alert('Payment verification failed: ' + (err?.response?.data?.message || err.message));
               setIsProcessing(false);
             }
           },
@@ -180,42 +182,24 @@ export default function CheckoutPage() {
         });
         rzp.open();
       } catch (err: any) {
-        alert(err.message || "Failed to initialize payment");
+        alert(err?.response?.data?.message || err.message || "Failed to initialize payment");
         setIsProcessing(false);
       }
 
     } else if (selectedMethod === 'COD') {
       try {
-        const orderId = "ZE" + Date.now();
-        const payload = {
-          order_id: orderId,
-          customer_name: `${shippingData.firstName} ${shippingData.lastName}`.trim(),
-          customer_email: shippingData.email,
-          customer_address: `${shippingData.address}, ${shippingData.city}, ${shippingData.postalCode}`,
-          customer_phone: shippingData.phone || 'N/A',
-          amount: Number(total),
-          products: JSON.stringify(items),
-          payment_method: 'COD',
-          status: 'pending'
-        };
-
-        const { error } = await supabase.from('orders').insert([payload]);
-
-        if (error) {
-          console.error("insert failed", error);
-          alert("Order failed: " + error.message);
-          setIsProcessing(false);
-          return;
-        }
+        await ordersApi.create({
+          shipping_address: buildShippingAddress(),
+          payment_method: 'cod',
+        });
 
         clearCart();
         setStep(4);
         setTimeout(() => {
           navigate("/");
         }, 2000);
-        
       } catch (err: any) {
-        alert("Unexpected error");
+        alert('Order failed: ' + (err?.response?.data?.message || err.message));
         setIsProcessing(false);
       }
     }

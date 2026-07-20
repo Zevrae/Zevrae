@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { useCart } from './CartContext';
 import { useAuthModal } from './AuthModalContext';
-import { supabase } from './supabaseClient';
+import { useAuth } from './hooks/UseAuth';
 import './BagPage.css';
 
 // "YOUR BAG" split into individual characters; space kept as a real char
@@ -14,6 +14,7 @@ const BAG_CHAR_ORDER = BAG_CHARS.map((_, i) => i);
 export default function BagPage() {
   const { items, removeFromCart, updateQuantity, cartTotal } = useCart();
   const { setIsLoginModalOpen } = useAuthModal();
+  const { token } = useAuth();
   const navigate = useNavigate();
   const headerRef = useRef<HTMLElement>(null);
   const dividerRef = useRef<HTMLDivElement>(null);
@@ -59,9 +60,8 @@ export default function BagPage() {
     return () => { tl.kill(); };
   }, []);
 
-  const handleCheckout = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
+  const handleCheckout = () => {
+    if (!token) {
       setIsLoginModalOpen(true);
     } else {
       navigate('/checkout');
