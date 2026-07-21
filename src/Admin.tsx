@@ -17,37 +17,7 @@ import { ordersApi, Order } from './api/orders';
 
 type AdminSection = 'dashboard' | 'orders' | 'products' | 'collections' | 'categories' | 'discounts';
 
-// ─── Mock data for frontend-only sections ───────────────────────────────────
 
-const mockProducts = [
-  { id: 'p1', name: 'Oversized Wool Coat', category: 'Men', price: 12500, stock: 18, status: 'active', image: 'https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?auto=format&fit=crop&q=80&w=200' },
-  { id: 'p2', name: 'Draped Silk Gown', category: 'Women', price: 18500, stock: 7, status: 'active', image: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&q=80&w=200' },
-  { id: 'p3', name: 'Cashmere Turtleneck', category: 'Men', price: 8900, stock: 0, status: 'draft', image: 'https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&q=80&w=200' },
-  { id: 'p4', name: 'Sterling Silver Ring', category: 'Jewellery', price: 3200, stock: 44, status: 'active', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&q=80&w=200' },
-  { id: 'p5', name: 'Leather Bomber Jacket', category: 'Men', price: 21000, stock: 5, status: 'active', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=200' },
-  { id: 'p6', name: 'Pleated Wide-Leg Pants', category: 'Women', price: 7200, stock: 12, status: 'active', image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=200' },
-];
-
-const mockCollections = [
-  { id: 'c1', name: 'Autumn / Winter 2026', slug: 'aw26', products: 14, status: 'active', featured: true },
-  { id: 'c2', name: 'Spring / Summer 2026', slug: 'ss26', products: 22, status: 'active', featured: false },
-  { id: 'c3', name: 'Jewellery Essentials', slug: 'jewellery-essentials', products: 8, status: 'active', featured: true },
-  { id: 'c4', name: 'The Edit', slug: 'the-edit', products: 6, status: 'draft', featured: false },
-];
-
-const mockCategories = [
-  { id: 'cat1', name: 'Men', slug: 'men', subcategories: ['T-Shirts', 'Lowers', 'Outerwear'], products: 24, status: 'active' },
-  { id: 'cat2', name: 'Women', slug: 'women', subcategories: ['T-Shirts', 'Lowers', 'Dresses'], products: 31, status: 'active' },
-  { id: 'cat3', name: 'Jewellery', slug: 'jewellery', subcategories: ['Rings', 'Pendants', 'Bracelets', 'Earrings', 'Keychain', 'Toys'], products: 18, status: 'active' },
-];
-
-const mockDiscounts = [
-  { id: 'd1', code: 'ZEVRAE10', type: 'Percentage', value: 10, uses: 143, limit: 500, status: 'active', expiry: '2026-12-31' },
-  { id: 'd2', code: 'FLAT500', type: 'Fixed Amount', value: 500, uses: 67, limit: 200, status: 'active', expiry: '2026-09-30' },
-  { id: 'd3', code: 'WELCOME15', type: 'Percentage', value: 15, uses: 200, limit: 200, status: 'expired', expiry: '2026-03-31' },
-];
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const formatVal = (val: number) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
