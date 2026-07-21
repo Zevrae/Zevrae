@@ -139,7 +139,7 @@ function DashboardSection({ orders }: { orders: Order[] }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <MetricCard title="Total Orders" value={totalOrders} icon={<Archive size={16} />} sub="All time" />
         <MetricCard title="Pending" value={pendingOrders} icon={<Clock size={16} />} sub="Requires action" />
-        <MetricCard title="Products" value={mockProducts.length} icon={<ShoppingBag size={16} />} sub="In catalog" />
+        <MetricCard title="Products" value={6} icon={<ShoppingBag size={16} />} sub="In catalog" />
         <MetricCard title="Revenue" value={formatVal(revenue)} icon={<TrendingUp size={16} />} sub="Prepaid orders" highlight />
       </div>
 
@@ -178,23 +178,23 @@ function DashboardSection({ orders }: { orders: Order[] }) {
           <div className="bg-[#111] border border-[#EAE6E1]/10 rounded-sm p-5">
             <p className="text-[10px] uppercase tracking-[0.2em] font-sans text-[#C5A059] mb-4">Catalog Overview</p>
             <div className="space-y-3">
-              {mockCategories.map(cat => (
+              {/* {mockCategories.map(cat => (
                 <div key={cat.id} className="flex items-center justify-between">
                   <span className="text-[11px] font-sans text-[#EAE6E1]/70">{cat.name}</span>
                   <span className="text-[11px] font-mono text-[#EAE6E1]/50">{cat.products} products</span>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
           <div className="bg-[#111] border border-[#EAE6E1]/10 rounded-sm p-5">
             <p className="text-[10px] uppercase tracking-[0.2em] font-sans text-[#C5A059] mb-4">Active Discounts</p>
             <div className="space-y-3">
-              {mockDiscounts.filter(d => d.status === 'active').map(d => (
+              {/* {mockDiscounts.filter(d => d.status === 'active').map(d => (
                 <div key={d.id} className="flex items-center justify-between">
                   <span className="text-[11px] font-mono text-[#EAE6E1]/70">{d.code}</span>
                   <span className="text-[11px] font-sans text-[#EAE6E1]/50">{d.uses}/{d.limit} uses</span>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
