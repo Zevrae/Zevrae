@@ -445,6 +445,8 @@ interface DbProduct {
   subcategory: string;
   price: number;
   compare_price: number | null;
+  discount: number | null;
+  in_stock: boolean;
   sizes: string[];
   images: string[];
   status: string;
@@ -460,6 +462,8 @@ const emptyForm = (): Omit<DbProduct, 'id' | 'created_at'> => ({
   subcategory: 'T-Shirts',
   price: 0,
   compare_price: null,
+  discount: null,
+  in_stock: true,
   sizes: [],
   images: [],
   status: 'active',
@@ -517,6 +521,8 @@ function ProductsSection() {
       subcategory: p.subcategory,
       price: p.price,
       compare_price: p.compare_price,
+      discount: p.discount ?? null,
+      in_stock: p.in_stock !== false,
       sizes: p.sizes || [],
       images: p.images || [],
       status: p.status,
@@ -633,6 +639,8 @@ function ProductsSection() {
                   <th className="p-4 font-normal">Subcategory</th>
                   <th className="p-4 font-normal">Price</th>
                   <th className="p-4 font-normal">Compare</th>
+                  <th className="p-4 font-normal">Discount</th>
+                  <th className="p-4 font-normal">Stock</th>
                   <th className="p-4 font-normal">Sizes</th>
                   <th className="p-4 font-normal">Status</th>
                   <th className="p-4 font-normal text-right">Actions</th>
@@ -641,13 +649,13 @@ function ProductsSection() {
               <tbody>
                 {dbLoading ? (
                   <tr>
-                    <td colSpan={7} className="p-10 text-center text-[11px] uppercase tracking-[0.2em] font-sans text-[#C5A059] animate-pulse">
+                    <td colSpan={9} className="p-10 text-center text-[11px] uppercase tracking-[0.2em] font-sans text-[#C5A059] animate-pulse">
                       Loading...
                     </td>
                   </tr>
                 ) : filteredDb.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="p-10 text-center text-[11px] font-sans text-[#EAE6E1]/30">
+                    <td colSpan={9} className="p-10 text-center text-[11px] font-sans text-[#EAE6E1]/30">
                       {dbError ? 'Table not found.' : 'No products yet. Click "Add Product" to create one.'}
                     </td>
                   </tr>
@@ -677,6 +685,22 @@ function ProductsSection() {
                       <td className="p-4 text-[11px] font-mono text-[#EAE6E1]">{formatVal(p.price)}</td>
                       <td className="p-4 text-[10px] font-mono text-[#EAE6E1]/40 line-through">
                         {p.compare_price ? formatVal(p.compare_price) : '—'}
+                      </td>
+                      <td className="p-4">
+                        {p.discount ? (
+                          <span className="px-2 py-0.5 text-[9px] font-mono font-semibold rounded-sm bg-emerald-900/20 text-emerald-400 border border-emerald-900/40">
+                            -{p.discount}%
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-[#EAE6E1]/20 font-sans">—</span>
+                        )}
+                      </td>
+                      <td className="p-4">
+                        {p.in_stock !== false ? (
+                          <span className="px-2 py-0.5 text-[9px] uppercase tracking-wider font-sans rounded-sm border bg-emerald-900/25 text-emerald-400 border-emerald-900/40">In Stock</span>
+                        ) : (
+                          <span className="px-2 py-0.5 text-[9px] uppercase tracking-wider font-sans rounded-sm border bg-red-900/20 text-red-400 border-red-900/30">Out of Stock</span>
+                        )}
                       </td>
                       <td className="p-4">
                         <div className="flex flex-wrap gap-1">
@@ -887,6 +911,37 @@ function ProductsSection() {
             </FormField>
 
             {/* Legacy Image previews removed */}
+
+            <div className="grid grid-cols-2 gap-3">
+              <FormField label="Discount (%)">
+                <input
+                  type="number"
+                  min="0"
+                  max="99"
+                  value={form.discount ?? ''}
+                  onChange={e => setForm(f => ({ ...f, discount: e.target.value ? Number(e.target.value) : null }))}
+                  placeholder="e.g. 10 for 10% off"
+                  className={inputCls}
+                />
+                {form.discount && form.discount > 0 && (
+                  <p className="text-[9px] text-emerald-400 font-sans mt-1.5">-{form.discount}% discount applied</p>
+                )}
+              </FormField>
+              <FormField label="Stock Availability">
+                <button
+                  type="button"
+                  onClick={() => setForm(f => ({ ...f, in_stock: !f.in_stock }))}
+                  className={`w-full py-2.5 px-3 border rounded-sm text-[11px] font-sans flex items-center gap-2 transition-all duration-150 ${
+                    form.in_stock
+                      ? 'border-emerald-700/50 text-emerald-400 bg-emerald-900/15'
+                      : 'border-red-800/40 text-red-400 bg-red-900/10'
+                  }`}
+                >
+                  {form.in_stock ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
+                  {form.in_stock ? 'In Stock' : 'Out of Stock'}
+                </button>
+              </FormField>
+            </div>
 
             <FormField label="Status">
               <select
@@ -1428,6 +1483,12 @@ export default function Admin() {
               className="md:hidden text-[#EAE6E1]/50 hover:text-[#EAE6E1] transition-colors"
             >
               <Package2 size={20} />
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[9px] uppercase tracking-[0.15em] font-sans bg-[#12100C] border border-[#EAE6E1]/15 text-[#EAE6E1]/70 hover:text-[#C5A059] hover:border-[#C5A059]/40 transition-colors rounded-sm"
+            >
+              Back to Site
             </button>
             <div>
               <h1 className="text-[13px] uppercase tracking-[0.25em] font-sans text-[#EAE6E1]">
