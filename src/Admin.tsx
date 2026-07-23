@@ -448,6 +448,7 @@ interface DbProduct {
   discount: number | null;
   in_stock: boolean;
   sizes: string[];
+  size_stock: Record<string, number>;
   images: string[];
   status: string;
   created_at: string;
@@ -465,6 +466,7 @@ const emptyForm = (): Omit<DbProduct, 'id' | 'created_at'> => ({
   discount: null,
   in_stock: true,
   sizes: [],
+  size_stock: {},
   images: [],
   status: 'active',
 });
@@ -524,6 +526,7 @@ function ProductsSection() {
       discount: p.discount ?? null,
       in_stock: p.in_stock !== false,
       sizes: p.sizes || [],
+      size_stock: p.size_stock || {},
       images: p.images || [],
       status: p.status,
     });
@@ -533,10 +536,20 @@ function ProductsSection() {
 
   // ── Toggle size chip ───────────────────────────────────────────────────────
   const toggleSize = (s: string) => {
-    setForm(f => ({
-      ...f,
-      sizes: f.sizes.includes(s) ? f.sizes.filter(x => x !== s) : [...f.sizes, s],
-    }));
+    setForm(f => {
+      const isSelected = f.sizes.includes(s);
+      const newSizes = isSelected ? f.sizes.filter(x => x !== s) : [...f.sizes, s];
+      // Remove stock entry when size is deselected
+      const newSizeStock = { ...f.size_stock };
+      if (isSelected) delete newSizeStock[s];
+      else if (!(s in newSizeStock)) newSizeStock[s] = 0;
+      return { ...f, sizes: newSizes, size_stock: newSizeStock };
+    });
+  };
+
+  // ── Update per-size stock quantity ─────────────────────────────────────────
+  const setSizeStock = (s: string, qty: number) => {
+    setForm(f => ({ ...f, size_stock: { ...f.size_stock, [s]: Math.max(0, qty) } }));
   };
 
   // ── Save (create or update) ────────────────────────────────────────────────
@@ -545,7 +558,7 @@ function ProductsSection() {
     setSaving(true);
 
     try {
-      const payload = { ...form, images: form.images } as any;
+      const payload = { ...form, images: form.images, size_stock: form.size_stock } as any;
 
       let productId = editingId;
       if (editingId) {
@@ -846,21 +859,50 @@ function ProductsSection() {
             </div>
 
             <FormField label="Available Sizes">
-              <div className="flex flex-wrap gap-2 mt-1">
-                {ALL_SIZES.map(s => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => toggleSize(s)}
-                    className={`px-3 py-1.5 text-[11px] font-sans uppercase tracking-wider border rounded-sm transition-all duration-150 ${
-                      form.sizes.includes(s)
-                        ? 'border-[#C5A059] text-[#C5A059] bg-[#C5A059]/10'
-                        : 'border-[#EAE6E1]/15 text-[#EAE6E1]/40 hover:border-[#EAE6E1]/30'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
+              <div className="space-y-2 mt-1">
+                {ALL_SIZES.map(s => {
+                  const isActive = form.sizes.includes(s);
+                  return (
+                    <div key={s} className={`flex items-center gap-3 p-2 rounded-sm border transition-all duration-150 ${
+                      isActive ? 'border-[#C5A059]/40 bg-[#C5A059]/5' : 'border-[#EAE6E1]/8 bg-transparent'
+                    }`}>
+                      {/* Toggle button */}
+                      <button
+                        type="button"
+                        onClick={() => toggleSize(s)}
+                        className={`flex-shrink-0 min-w-[3rem] px-3 py-1.5 text-[11px] font-sans uppercase tracking-wider border rounded-sm transition-all duration-150 ${
+                          isActive
+                            ? 'border-[#C5A059] text-[#C5A059] bg-[#C5A059]/10'
+                            : 'border-[#EAE6E1]/15 text-[#EAE6E1]/40 hover:border-[#EAE6E1]/30 hover:text-[#EAE6E1]/60'
+                        }`}
+                      >
+                        {s}
+                      </button>
+
+                      {/* Stock quantity input — only visible when size is selected */}
+                      {isActive ? (
+                        <div className="flex items-center gap-2 flex-1">
+                          <span className="text-[9px] uppercase tracking-[0.12em] font-sans text-[#EAE6E1]/35 flex-shrink-0">Stock qty</span>
+                          <input
+                            type="number"
+                            min="0"
+                            value={form.size_stock[s] ?? 0}
+                            onChange={e => setSizeStock(s, Number(e.target.value))}
+                            className="flex-1 bg-[#12100C] border border-[#EAE6E1]/10 rounded-sm px-2 py-1 text-[12px] text-[#EAE6E1] font-mono focus:outline-none focus:border-[#C5A059]/40 transition-colors"
+                            placeholder="0"
+                          />
+                          {(form.size_stock[s] ?? 0) > 0 && (
+                            <span className="text-[9px] text-emerald-400 font-sans flex-shrink-0">
+                              {form.size_stock[s]} in stock
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-[9px] text-[#EAE6E1]/20 font-sans italic">not available</span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
               {form.sizes.length === 0 && (
                 <p className="text-[9px] text-[#C5A059]/70 font-sans mt-2">Select at least one size</p>

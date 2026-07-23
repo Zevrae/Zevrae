@@ -10,6 +10,7 @@ export interface Product {
   compare_price: number;
   images: string[];
   sizes: string[];
+  size_stock: Record<string, number>;
   status: 'active' | 'inactive' | 'draft' | 'archived';
   collections: string[];
   created_at: string;
